@@ -1,9 +1,9 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import IntroScreen from '../screens/AppIntro';
-// import ConnectWallet from '../screens/wallet_connection/connectwallet';
-// import Home from '../screens/HomeTab';
-// import HomeTab from '../screens/HomeTab';
+import ConnectWallet from '../screens/wallet_connection/connectwallet';
+import Home from '../screens/HomeTab';
+import HomeTab from '../screens/HomeTab';
 // import ViewProduct from './ViewProductNavigator'; // Import the ViewProduct stack
 // import HomePageNavigate from './HomeStackNavigator';
 // import WalletConnectionManager from '../screens/connectwallet';
@@ -24,7 +24,7 @@ function AppNavigator(initialRouteName) {
         component={WalletConnectionManager}
         options={{headerShown: false}}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="HomeTab"
         component={HomeTab}
         options={{headerShown: false}}
@@ -33,7 +33,7 @@ function AppNavigator(initialRouteName) {
         name="Home"
         component={Home}
         options={{headerShown: false}}
-      /> */}
+      />
       {/*
       <Stack.Screen
         name="ViewProduct"

@@ -10,21 +10,22 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Make sure to install react-native-vector-icons
-// import WalletConnectionManager from './connectwallet';
+import WalletConnectionManager from './wallet_connection/WalletConnectionManager';
 import {useNavigation} from '@react-navigation/native'; // or your navigation library
 import {useWallet} from './wallet_connection/walletContext';
+
 const ProfilePage = () => {
   const navigation = useNavigation();
-  // const {address, isConnected, connectWallet, disconnectWallet} = useWallet();
-  // const handleButtonPress = () => {
-  //   if (isConnected) {
-  //     console.log('wallet is connected');
-  //     disconnectWallet();
-  //   } else {
-  //     console.log('Wallet is not connected');
-  //     connectWallet();
-  //   }
-  // };
+  const {address, isConnected, connectWallet, disconnectWallet} = useWallet();
+  const handleButtonPress = () => {
+    if (isConnected) {
+      console.log('wallet is connected');
+      disconnectWallet();
+    } else {
+      console.log('Wallet is not connected');
+      connectWallet();
+    }
+  };
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -40,7 +41,7 @@ const ProfilePage = () => {
         </View>
         {/* <WalletConnectionManager /> */}
 
-        {/* <View>
+        <View>
           {isConnected ? (
             <>
               <Text>Your Address:</Text>
@@ -52,20 +53,22 @@ const ProfilePage = () => {
               <Button title="Connect" onPress={handleButtonPress}></Button>
             </>
           )}
-        </View> */}
-        <Text>Connection here</Text>
+        </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Mine a Token</Text>
           <Text style={styles.sectionDescription}></Text>
           <TouchableOpacity style={styles.button}>
             <Text
               onPress={() => {
-                // try {
-                //   navigation.navigate('createNewToken');
-                // } catch (error) {
-                //   console.log('unable to open', error);
-                // }
+                navigation.navigate('CreateNewToken');
               }}
+              // onPress={() => {
+              //   try {
+              //     navigation.navigate('CreateNewToken');
+              //   } catch (error) {
+              //     console.log('unable to open', error);
+              //   }
+              // }}
               style={styles.buttonText}>
               Create New Token
             </Text>

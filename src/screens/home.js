@@ -39,16 +39,16 @@ const Home = () => {
         <View style={styles.body}>
           <TouchableOpacity style={styles.button}>
             <Text
-              // onPress={() => navigation.navigate('ViewProduct')}
-              onPress={() => {}}
+              onPress={() => navigation.navigate('ViewProduct')}
+              // onPress={() => {}}
               style={styles.buttonText}>
               View My Products
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
             <Text
-              // onPress={() => navigation.navigate('ViewPending')}
-              onPress={() => {}}
+              onPress={() => navigation.navigate('ViewPending')}
+              // onPress={() => {}}
               style={styles.buttonText}>
               View Pending
             </Text>

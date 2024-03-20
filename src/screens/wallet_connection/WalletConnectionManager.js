@@ -4,7 +4,7 @@ import {StyleSheet, View, Pressable, Text} from 'react-native';
 import {useWallet} from './walletContext'; // Adjust the import path to where you saved WalletContext.js
 import {useNavigation} from '@react-navigation/native';
 
-export default WalletConnectionManager = () => {
+const WalletConnectionManager = () => {
   const {isConnected, address, connectWallet, disconnectWallet} = useWallet();
   const navigation = useNavigation();
 
@@ -46,3 +46,5 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 });
+
+export default WalletConnectionManager;

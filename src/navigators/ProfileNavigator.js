@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
 
 import ProfilePage from '../screens/profile';
+import CreateNewToken from '../screens/createNewToken';
 // import CreateNewToken from '../screens/createNewToken';
 
 const ProfileStack = createNativeStackNavigator();
@@ -15,11 +16,11 @@ function ProfileStackNavigate({initialRouteName}) {
         component={ProfilePage}
         options={{headerShown: false}}
       />
-      {/* <ProfileStack.Screen
-        name="createNewToken"
+      <ProfileStack.Screen
+        name="CreateNewToken"
         component={CreateNewToken}
         options={{headerShown: false}}
-      /> */}
+      />
     </ProfileStack.Navigator>
   );
 }
