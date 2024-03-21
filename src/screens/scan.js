@@ -1,85 +1,49 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text} from 'react-native';
+import {RNCamera} from 'react-native-camera';
+import {useWallet} from './wallet_connection/walletContext';
+import contract from '../components/contractSetup';
 
 const ScanPage = () => {
+  const [scannedData, setScannedData] = useState('');
+  const {address} = useWallet();
+
+  const onBarcodeScanned = async ({data}) => {
+    setScannedData(data);
+    // Call handleQrScan function with the scanned data
+    handleQrScan(data);
+  };
+
+  const handleQrScan = async scannedData => {
+    const tokenId = scannedData.tokenId;
+    console.log(tokenId);
+    // Call other functions or perform actions based on the scanned data
+    // For example:
+    // const qrOwner = await contract.ownerOf(tokenId);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>This is Scan Page</Text>
+    <View style={{flex: 1}}>
+      <RNCamera
+        style={{flex: 1}}
+        onBarCodeRead={onBarcodeScanned}
+        barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+      />
+      {scannedData !== '' && (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'white',
+            padding: 20,
+          }}>
+          <Text>Scanned QR Code: {scannedData}</Text>
+        </View>
+      )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-});
-
 export default ScanPage;
-
-// // import React from 'react';
-// // import {Alert, View, Text} from 'react-native';
-// // import {RNCamera} from 'react-native-camera';
-// // import QRCodeScanner from 'react-native-qrcode-scanner';
-
-// // const QRScanner = () => {
-// //   const onSuccess = e => {
-// //     Alert.alert('QR Code', e.data);
-// //     // Handle the scanned data from e.data
-// //   };
-
-// //   return (
-// //     <View style={{flex: 1}}>
-// //       <QRCodeScanner
-// //         onRead={onSuccess}
-// //         flashMode={RNCamera.Constants.FlashMode.auto}
-// //         topContent={
-// //           <View>
-// //             <Text>Scan your QR code</Text>
-// //           </View>
-// //         }
-// //         bottomContent={
-// //           <View>
-// //             <Text>Point your camera at a QR code</Text>
-// //           </View>
-// //         }
-// //       />
-// //     </View>
-// //   );
-// // };
-// // export default QRScanner;
-// import React from 'react';
-// import {Alert, View, Text} from 'react-native';
-// import {RNCamera} from 'react-native-camera'; // Ensure it's installed for QRCodeScanner to work
-// import QRCodeScanner from 'react-native-qrcode-scanner';
-
-// const ScanPage = () => {
-//   const onSuccess = e => {
-//     Alert.alert('QR Code', e.data); // This will show an alert with the QR code data
-//     // Handle the scanned data from e.data here
-//   };
-
-//   return (
-//     <View style={{flex: 1}}>
-//       <QRCodeScanner
-//         onRead={onSuccess}
-//         flashMode={RNCamera.Constants.FlashMode.auto}
-//         topContent={
-//           <View>
-//             <Text>Scan your QR code</Text>
-//           </View>
-//         }
-//         bottomContent={
-//           <View>
-//             <Text>Point your camera at a QR code</Text>
-//           </View>
-//         }
-//       />
-//     </View>
-//   );
-// };
-
-// export default ScanPage;
