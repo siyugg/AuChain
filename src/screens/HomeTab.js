@@ -9,7 +9,8 @@ import React from 'react';
 import {Text} from 'react-native';
 import HomeStackNavigate from '../navigators/HomeStackNavigator';
 import ProfileStackNavigate from '../navigators/ProfileNavigator';
-import ScanPage from './scan';
+// import ScanPage from './scan';
+import ScanPageStackNavigate from '../navigators/ScanPageNavigator';
 
 const HomeTab = ({navigation}) => {
   const Tab = createMaterialBottomTabNavigator();
@@ -20,8 +21,8 @@ const HomeTab = ({navigation}) => {
       activeColor="#e1bf92"
       barStyle={{backgroundColor: '#fff'}}>
       <Tab.Screen
-        name="Scan"
-        component={ScanPage}
+        name="ScanPageStackNavigate"
+        component={ScanPageStackNavigate}
         options={{
           tabBarLabel: 'Scan',
           tabBarIcon: ({color}) => (

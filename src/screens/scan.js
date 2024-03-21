@@ -1,34 +1,53 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import {useWallet} from './wallet_connection/walletContext';
-import contract from '../components/contractSetup';
+import {useFocusEffect} from '@react-navigation/native';
+import CryptoJS from 'crypto-js';
 
-const ScanPage = () => {
+const ScanPage = ({navigation}) => {
   const [scannedData, setScannedData] = useState('');
-  const {address} = useWallet();
+  const [decryptedData, setDecryptedData] = useState('');
+  const [isDecrypted, setIsDecrypted] = useState(false);
+  const [viewFocused, setViewFocused] = useState(false);
 
-  const onBarcodeScanned = async ({data}) => {
-    setScannedData(data);
-    // Call handleQrScan function with the scanned data
-    handleQrScan(data);
+  const handleQrScan = async data => {
+    if (!isDecrypted) {
+      setScannedData(data);
+
+      // Decrypt the scanned data
+      const secretKey = ''; // Add your secret key here
+      const bytes = CryptoJS.AES.decrypt(data, secretKey);
+      const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+      console.log('Decrypted Data:', decryptedData);
+
+      setDecryptedData(decryptedData);
+      setIsDecrypted(true);
+
+      navigation.navigate('QrInfo', {decryptedData: decryptedData});
+    }
   };
 
-  const handleQrScan = async scannedData => {
-    const tokenId = scannedData.tokenId;
-    console.log(tokenId);
-    // Call other functions or perform actions based on the scanned data
-    // For example:
-    // const qrOwner = await contract.ownerOf(tokenId);
-  };
+  // Use useFocusEffect to handle focus and blur events
+  useFocusEffect(
+    React.useCallback(() => {
+      setViewFocused(true); // Set viewFocused to true when screen is focused
+
+      return () => {
+        setViewFocused(false); // Set viewFocused to false when screen is blurred
+        setIsDecrypted(false); // Reset decryption flag
+      };
+    }, []),
+  );
 
   return (
     <View style={{flex: 1}}>
-      <RNCamera
-        style={{flex: 1}}
-        onBarCodeRead={onBarcodeScanned}
-        barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
-      />
+      {viewFocused && ( // Render camera only when view is focused
+        <RNCamera
+          style={{flex: 1}}
+          onBarCodeRead={data => handleQrScan(data.data)}
+          barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+        />
+      )}
       {scannedData !== '' && (
         <View
           style={{
@@ -40,6 +59,7 @@ const ScanPage = () => {
             padding: 20,
           }}>
           <Text>Scanned QR Code: {scannedData}</Text>
+          <Text>Decrypted Data: {decryptedData}</Text>
         </View>
       )}
     </View>
