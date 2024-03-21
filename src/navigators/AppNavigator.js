@@ -2,8 +2,8 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import IntroScreen from '../screens/AppIntro';
 import ConnectWallet from '../screens/wallet_connection/connectwallet';
-import Home from '../screens/HomeTab';
-import HomeTab from '../screens/HomeTab';
+import Home from './HomeTab';
+import HomeTab from './HomeTab';
 // import ViewProduct from './ViewProductNavigator'; // Import the ViewProduct stack
 // import HomePageNavigate from './HomeStackNavigator';
 // import WalletConnectionManager from '../screens/connectwallet';

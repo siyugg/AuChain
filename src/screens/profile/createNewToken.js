@@ -14,7 +14,7 @@ import pinataFileUploader from '../../components/upload-file-to-pinata';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
 import {ethers} from 'ethers';
 import {contractAddress} from '../../data/contractInfo';
-import contract from '../../components/contractSetup';
+import useContract from '../../components/contractSetup';
 
 const CreateNewToken = () => {
   const {address, isConnected} = useWallet();
@@ -27,6 +27,7 @@ const CreateNewToken = () => {
   const [qrValue, setQrValue] = useState(' ');
   const [showQR, setShowQR] = useState(false);
   const qrRef = useRef();
+  const {contract} = useContract;
 
   if (!isConnected) {
     console.log('your app is not connected');

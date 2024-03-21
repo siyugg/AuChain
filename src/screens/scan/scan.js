@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import CryptoJS from 'crypto-js';
 import {useWallet} from '../wallet_connection/walletContext';
 import contract from '../../components/contractSetup';
+import useContract from '../../components/contractSetup';
 
 const ScanPage = () => {
   const [scannedData, setScannedData] = useState('');
@@ -14,6 +15,7 @@ const ScanPage = () => {
   const [viewFocused, setViewFocused] = useState(false);
   const navigation = useNavigation();
   const {address} = useWallet();
+  const {contract} = useContract;
 
   const checkOwner0 = async () => {
     ownerAddress = await contract.ownerOf(decryptedData.tokenId);
