@@ -4,6 +4,8 @@ import {RNCamera} from 'react-native-camera';
 import {useFocusEffect} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import CryptoJS from 'crypto-js';
+import {useWallet} from '../wallet_connection/walletContext';
+import contract from '../../components/contractSetup';
 
 const ScanPage = () => {
   const [scannedData, setScannedData] = useState('');
@@ -11,6 +13,30 @@ const ScanPage = () => {
   const [isDecrypted, setIsDecrypted] = useState(false);
   const [viewFocused, setViewFocused] = useState(false);
   const navigation = useNavigation();
+  const {address} = useWallet();
+
+  const checkOwner0 = async () => {
+    ownerAddress = await contract.ownerOf(decryptedData.tokenId);
+    console.log(ownerAddress);
+  };
+
+  const checkOwner = async tokenId => {
+    try {
+      const ownerAddress = await contract.ownerOf(tokenId);
+      console.log('Owner address:', ownerAddress);
+
+      if (ownerAddress === address) {
+        // If owner address matches user address, navigate to QrInfo screen
+        navigation.navigate('QrInfo', {decryptedData: decryptedData});
+      } else {
+        // If owner address doesn't match user address, display an alert
+        Alert.alert('Alert', 'You are not the owner of this token.');
+      }
+    } catch (error) {
+      console.error('Error checking owner:', error);
+      Alert.alert('Error', 'Failed to check owner.');
+    }
+  };
 
   const handleQrScan = async data => {
     if (!isDecrypted) {
@@ -20,10 +46,13 @@ const ScanPage = () => {
       const secretKey = 'ok'; // Add your secret key here
       const bytes = CryptoJS.AES.decrypt(data, secretKey);
       const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+      const decryptedDataObject = JSON.parse(decryptedData);
+      const tokenId = decryptedDataObject.tokenId;
       // console.log(decryptedData);
 
       setDecryptedData(decryptedData);
       setIsDecrypted(true);
+      checkOwner(tokenId);
 
       // Navigate to qrInfoPage and pass the decrypted data as a parameter
       navigation.navigate('QrInfo', {decryptedData: decryptedData});

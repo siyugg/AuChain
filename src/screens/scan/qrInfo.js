@@ -36,7 +36,6 @@ const QrInfo = ({route}) => {
           <Text>Product Name: {productData.productName}</Text>
           <Text>Manufacture Date: {productData.manufactureDate}</Text>
           <Text>Product ID: {productData.productId}</Text>
-          {/* Add additional fields as needed */}
         </View>
       ) : (
         <Text>No product data found for CID: {decryptedData.cid}</Text>
