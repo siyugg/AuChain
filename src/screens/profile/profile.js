@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Make sure to install react-native-vector-icons
-import WalletConnectionManager from './wallet_connection/WalletConnectionManager';
+import WalletConnectionManager from '../wallet_connection/WalletConnectionManager';
 import {useNavigation} from '@react-navigation/native'; // or your navigation library
-import {useWallet} from './wallet_connection/walletContext';
+import {useWallet} from '../wallet_connection/walletContext';
 
 const ProfilePage = () => {
   const navigation = useNavigation();
@@ -35,7 +35,7 @@ const ProfilePage = () => {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Settings</Text>
           <Image
-            source={require('../../assets/image/logo.png')}
+            source={require('../../../assets/image/logo.png')}
             style={styles.profileImage}
           />
         </View>

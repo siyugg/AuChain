@@ -2,8 +2,8 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
 
-import ScanPage from '../screens/scan';
-import QrInfo from '../screens/qrInfo';
+import ScanPage from '../screens/scan/scan';
+import QrInfo from '../screens/scan/qrInfo';
 
 const ScanPageStack = createNativeStackNavigator();
 

@@ -16,10 +16,29 @@ import axios from 'axios';
 // };
 
 // export default fetchIPFSData;
+// const fetchIPFSData = async cid => {
+//   const url = `https://gateway.pinata.cloud/ipfs/${cid}`;
+//   try {
+//     const response = await fetch(url);
+//     if (!response.ok)
+//       throw new Error(`Failed to fetch data from IPFS for CID: ${cid}`);
+//     const data = await response.json();
+//     console.log(`Fetched IPFS data for CID ${cid}:`, data);
+//     return data;
+//   } catch (error) {
+//     console.error(`Error fetching IPFS data for CID ${cid}:`, error);
+//     return null;
+//   }
+// };
+
+// export default fetchIPFSData;
+
 const fetchIPFSData = async cid => {
   const url = `https://gateway.pinata.cloud/ipfs/${cid}`;
+  console.log('Fetching data from IPFS for CID:', cid);
   try {
     const response = await fetch(url);
+    console.log('Response status:', response.status);
     if (!response.ok)
       throw new Error(`Failed to fetch data from IPFS for CID: ${cid}`);
     const data = await response.json();

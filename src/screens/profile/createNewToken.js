@@ -9,12 +9,12 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CryptoJS from 'crypto-js';
 import QRCode from 'react-native-qrcode-svg';
-import {useWallet} from './wallet_connection/walletContext';
-import pinataFileUploader from '../components/upload-file-to-pinata';
-import fetchIPFSData from '../components/retrieve-ipfs-data';
+import {useWallet} from '../wallet_connection/walletContext';
+import pinataFileUploader from '../../components/upload-file-to-pinata';
+import fetchIPFSData from '../../components/retrieve-ipfs-data';
 import {ethers} from 'ethers';
-import {contractAddress} from '../data/contractInfo';
-import contract from '../components/contractSetup';
+import {contractAddress} from '../../data/contractInfo';
+import contract from '../../components/contractSetup';
 
 const CreateNewToken = () => {
   const {address, isConnected} = useWallet();

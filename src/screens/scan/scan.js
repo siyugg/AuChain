@@ -2,27 +2,30 @@ import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import {useFocusEffect} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import CryptoJS from 'crypto-js';
 
-const ScanPage = ({navigation}) => {
+const ScanPage = () => {
   const [scannedData, setScannedData] = useState('');
   const [decryptedData, setDecryptedData] = useState('');
   const [isDecrypted, setIsDecrypted] = useState(false);
   const [viewFocused, setViewFocused] = useState(false);
+  const navigation = useNavigation();
 
   const handleQrScan = async data => {
     if (!isDecrypted) {
       setScannedData(data);
 
       // Decrypt the scanned data
-      const secretKey = ''; // Add your secret key here
+      const secretKey = 'ok'; // Add your secret key here
       const bytes = CryptoJS.AES.decrypt(data, secretKey);
       const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-      console.log('Decrypted Data:', decryptedData);
+      // console.log(decryptedData);
 
       setDecryptedData(decryptedData);
       setIsDecrypted(true);
 
+      // Navigate to qrInfoPage and pass the decrypted data as a parameter
       navigation.navigate('QrInfo', {decryptedData: decryptedData});
     }
   };
