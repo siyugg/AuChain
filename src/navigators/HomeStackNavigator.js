@@ -4,7 +4,7 @@ import 'react-native-gesture-handler';
 
 import Home from '../screens/home';
 import ViewProduct from './ViewProductNavigator';
-// import ViewPending from './ViewPendingNavigator';
+import ViewPending from './ViewPendingNavigator';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -21,11 +21,11 @@ function HomeStackNavigate({navigation}) {
         component={ViewProduct}
         options={{headerShown: false}}
       />
-      {/* <HomeStack.Screen
+      <HomeStack.Screen
         name="ViewPending"
         component={ViewPending}
         options={{headerShown: false}}
-      /> */}
+      />
     </HomeStack.Navigator>
   );
 }

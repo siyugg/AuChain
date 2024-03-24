@@ -33,6 +33,7 @@ import axios from 'axios';
 
 // export default fetchIPFSData;
 
+// revert to this
 const fetchIPFSData = async cid => {
   const url = `https://gateway.pinata.cloud/ipfs/${cid}`;
   console.log('Fetching data from IPFS for CID:', cid);
@@ -42,7 +43,10 @@ const fetchIPFSData = async cid => {
     if (!response.ok)
       throw new Error(`Failed to fetch data from IPFS for CID: ${cid}`);
     const data = await response.json();
-    console.log(`Fetched IPFS data for CID ${cid}:`, data);
+
+    const {blob, ...textData} = data;
+
+    console.log(`Fetched IPFS data for CID ${cid}:`, blob, textData);
     return data;
   } catch (error) {
     console.error(`Error fetching IPFS data for CID ${cid}:`, error);

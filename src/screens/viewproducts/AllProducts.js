@@ -8,21 +8,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native'; // or your navigation library
-import {useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import ProductDetailsScreen from './ProductDetails';
 import 'react-native-gesture-handler';
 import useContract from '../../components/contractSetup';
 import Button from '../../../assets/common/button';
 import {useWallet} from '../wallet_connection/walletContext';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
 
-const Item = ({name, id, manuDate, onPress}) => (
+const Item = ({name, id, manuDate, image, onPress}) => (
   <TouchableOpacity style={styles.item} onPress={onPress}>
     <View style={styles.item}>
-      {/* <Image source={image} style={styles.productImage} /> */}
+      <Image source={{uri: image}} style={{width: 50, height: 50}} />
       <View style={styles.productDetails}>
         <Text style={styles.productName}>{name}</Text>
 
@@ -40,6 +38,8 @@ const ProductListScreen = () => {
   const [productInfo, setProductInfo] = useState(null);
   const [products, setProducts] = useState([]);
   const {contract} = useContract;
+  const [productImage, setProductImage] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     loadProducts();
@@ -49,24 +49,13 @@ const ProductListScreen = () => {
     console.log('your app is not connected');
     return null;
   }
-  const navigation = useNavigation();
-
-  // const renderItem = ({item}) => (
-  //   <Item
-  //     name={item.name}
-  //     username={item.username}
-  //     price={item.price}
-  //     change={item.change}
-  //     image={item.image}
-  //     onPress={() => navigation.navigate('ProductDetails', {product: item})}
-  //   />
-  // );
 
   const renderEachItem = ({item}) => (
     <Item
       name={item.productName}
       id={item.productId}
       manuDate={item.manufactureDate}
+      image={item.imageSource}
       onPress={() => navigation.navigate('ProductDetails', {product: item})}
     />
   );
@@ -93,16 +82,13 @@ const ProductListScreen = () => {
       const productPromises = [];
 
       for (let i = 0; i < balance.toNumber(); i++) {
-        // const currToken = await contract.tokenInfo(i);
         const tokenId = await contract.tokenOfOwnerByIndex(address, i);
-
         const cid = await contract.getCID(tokenId);
-        // const tokenId = currToken.id.toString();
-        console.log('currtoken, id: ', cid, tokenId);
+        // console.log('currtoken, id: ', cid, tokenId.toString());
 
         const productPromise = fetchIPFSData(cid).then(data => ({
-          ...data, // Spread the fetched product data
-          tokenId: tokenId, // Include the tokenId
+          ...data,
+          tokenId: tokenId,
         }));
 
         productPromises.push(productPromise);
@@ -112,8 +98,7 @@ const ProductListScreen = () => {
       const validProducts = productsData.filter(product => product !== null);
       setProducts(validProducts);
 
-      console.log(productsData);
-      // setProducts(productsData);
+      console.log('products data: ', productsData);
     } catch (error) {
       console.error('Failed to load products:', error);
     }
@@ -130,15 +115,10 @@ const ProductListScreen = () => {
           </TouchableOpacity>
           <Text style={styles.headerText}>My Products</Text>
         </View>
-        {/* <FlatList
-          data={ProductData} // use the imported data
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        /> */}
         <FlatList
           data={products}
           renderItem={renderEachItem}
-          keyExtractor={item => item.productId}
+          keyExtractor={(item, index) => index.toString()}
         />
         <TouchableOpacity>
           <Button onPress={listTokens} title="List Tokens"></Button>

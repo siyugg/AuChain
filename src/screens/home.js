@@ -39,7 +39,6 @@ const Home = () => {
           <TouchableOpacity style={styles.button}>
             <Text
               onPress={() => navigation.navigate('ViewProduct')}
-              // onPress={() => {}}
               style={styles.buttonText}>
               View My Products
             </Text>
@@ -47,7 +46,6 @@ const Home = () => {
           <TouchableOpacity style={styles.button}>
             <Text
               onPress={() => navigation.navigate('ViewPending')}
-              // onPress={() => {}}
               style={styles.buttonText}>
               View Pending
             </Text>

@@ -8,6 +8,7 @@ import TransferOwnership from '../screens/viewproducts/transferownership';
 import TransactionDetails from '../screens/viewproducts/transactionDetails';
 import ConfirmTransaction from '../screens/viewproducts/ConfirmTransaction';
 import SuccessTransaction from '../screens/viewproducts/SuccessTransaction';
+import PastTransaction from '../screens/viewproducts/pastTransaction';
 // import PastTransaction from '../screens/pasttransaction';
 
 const ProductStack = createNativeStackNavigator();
@@ -30,11 +31,11 @@ function ViewProduct(initialRouteName) {
         component={TransferOwnership}
         options={{headerShown: false}}
       />
-      {/* <ProductStack.Screen
+      <ProductStack.Screen
         name="PastTransaction"
         component={PastTransaction}
         options={{headerShown: false}}
-      /> */}
+      />
       <ProductStack.Screen
         name="TransactionDetails"
         component={TransactionDetails}

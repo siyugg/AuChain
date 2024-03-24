@@ -8,15 +8,18 @@ import {
   Button,
   Pressable,
 } from 'react-native';
+import {ethers} from 'ethers';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Make sure to install react-native-vector-icons
 import WalletConnectionManager from '../wallet_connection/WalletConnectionManager';
 import {useNavigation} from '@react-navigation/native'; // or your navigation library
 import {useWallet} from '../wallet_connection/walletContext';
+import useContract from '../../components/contractSetup';
 
 const ProfilePage = () => {
   const navigation = useNavigation();
-  const {address, isConnected, connectWallet, disconnectWallet} = useWallet();
+  const {address, isConnected, connectWallet, disconnectWallet, provider} =
+    useWallet();
   const handleButtonPress = () => {
     if (isConnected) {
       console.log('wallet is connected');
@@ -39,8 +42,6 @@ const ProfilePage = () => {
             style={styles.profileImage}
           />
         </View>
-        {/* <WalletConnectionManager /> */}
-
         <View>
           {isConnected ? (
             <>
@@ -62,13 +63,6 @@ const ProfilePage = () => {
               onPress={() => {
                 navigation.navigate('CreateNewToken');
               }}
-              // onPress={() => {
-              //   try {
-              //     navigation.navigate('CreateNewToken');
-              //   } catch (error) {
-              //     console.log('unable to open', error);
-              //   }
-              // }}
               style={styles.buttonText}>
               Create New Token
             </Text>
@@ -155,14 +149,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#f0f0f0', // Light gray background for the button
+    backgroundColor: '#f0f0f0',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 10,
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
+    elevation: 3,
+    shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 2,

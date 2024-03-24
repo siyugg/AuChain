@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ethers} from 'ethers';
 import {
   ScrollView,
@@ -16,15 +16,36 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
 import useContract from '../../components/contractSetup';
 import {useWallet} from '../wallet_connection/walletContext';
+import {Web3Provider} from '@ethersproject/providers';
 
 const {width} = Dimensions.get('screen');
 
 const ConfirmTransaction = ({route, navigation, item}) => {
   const [recipientName, setRecipientName] = useState('');
   const {product, recipientAddress} = route.params;
-  const {address} = useWallet();
-  const gasLimit = ethers.utils.hexlify(6721975); // Example gas limit, you may need more or less
-  const {contract, signer} = useContract;
+  const {address, provider: web3Provider} = useWallet();
+  const gasLimit = ethers.utils.hexlify(6721975);
+  const {contract} = useContract;
+  // const [signer, setSigner] = useState('');
+
+  //refer to contractSetup for getting signer through private key
+  // useEffect(() => {
+  //   const connectSigner = () => {
+  //     const provider = new ethers.providers.Web3Provider(web3Provider);
+  //     let signer;
+  //     let signerAddress;
+
+  //     if (provider && provider.getSigner) {
+  //       // Check if provider and getSigner method exist
+  //       signer = provider.getSigner(); // Obtain signer from provider
+  //       setSigner(signer);
+  //       signer.getAddress().then(address => {
+  //         signerAddress = ethers.utils.getAddress(address);
+  //         console.log('signer address: ', signerAddress);
+  //       });
+  //     }
+  //   };
+  // });
 
   console.log('signer: ', signer);
   // After successful transaction
@@ -71,10 +92,19 @@ const ConfirmTransaction = ({route, navigation, item}) => {
 
       const tx = await contract
         .connect(signer)
-        .transferFrom(address, recipientAddress, product.tokenId, {
+        .initiateTransfer(recipientAddress, product.tokenId, {
           gasLimit: gasLimit,
         });
-      await tx.wait();
+      // const txResponse = await signer.sendTransaction(tx);
+
+      const transactionHash = tx.hash;
+      console.log('transactionHash is ' + transactionHash);
+
+      // Wait for the transaction to be mined (optional)
+      const receipt = await tx.wait();
+      console.log('Transaction was mined in block:', receipt.blockNumber);
+
+      // await tx.wait();
       console.log(tx);
       console.log('success');
       refreshProductList();

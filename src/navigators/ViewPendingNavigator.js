@@ -3,8 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
 
 import Home from '../screens/home';
-import AllPending from '../screens/AllPending';
-
+import AllPending from '../screens/viewpending/allPending';
 const PendingStack = createNativeStackNavigator();
 
 function ViewPending(initialRouteName) {

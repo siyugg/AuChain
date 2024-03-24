@@ -5,6 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Button,
+  Image,
+  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CryptoJS from 'crypto-js';
@@ -15,6 +18,8 @@ import fetchIPFSData from '../../components/retrieve-ipfs-data';
 import {ethers} from 'ethers';
 import {contractAddress} from '../../data/contractInfo';
 import useContract from '../../components/contractSetup';
+// import ImagePicker from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const CreateNewToken = () => {
   const {address, isConnected} = useWallet();
@@ -28,11 +33,57 @@ const CreateNewToken = () => {
   const [showQR, setShowQR] = useState(false);
   const qrRef = useRef();
   const {contract} = useContract;
+  const [productImage, setProductImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   if (!isConnected) {
     console.log('your app is not connected');
     return null;
   }
+
+  const openImagePicker = async () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    try {
+      const response = await launchImageLibrary(options);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setSelectedImage(imageUri);
+      }
+    } catch (error) {
+      console.error('Error selecting image:', error);
+    }
+  };
+
+  const handleCameraLaunch = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchCamera(options, response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled camera');
+      } else if (response.error) {
+        console.log('Camera Error: ', response.error);
+      } else {
+        // Process the captured image
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setSelectedImage(imageUri);
+        console.log(imageUri);
+      }
+    });
+  };
 
   const activateContract = async ({cid}) => {
     // 2.Connect to Metamask
@@ -58,12 +109,24 @@ const CreateNewToken = () => {
   const handleGenerateQR = async () => {
     try {
       // 1. Upload product information to IPFS
-      const uploadedProductInfo = {productName, productId, manufactureDate};
+      const blob = await fetch(selectedImage).then(response => response.blob());
+
+      const uploadedProductInfo = {
+        productName,
+        productId,
+        manufactureDate,
+        blob,
+      };
+      console.log(uploadedProductInfo);
       setProductInfo(uploadedProductInfo); // Update productInfo state
       const uploadedCid = await pinataFileUploader(uploadedProductInfo);
       setCid(uploadedCid); // Update CID state
       console.log(`Upload success! IPFS hash: ${uploadedCid}`);
-      fetchIPFSData(uploadedCid);
+
+      // fetchIPFSData(uploadedCid);
+      const fetchedData = fetchIPFSData(uploadedCid);
+      console.log(fetchedData);
+
       await activateContract({cid: uploadedCid}); // Pass the uploaded CID to activateContract
       const tokenId = contract.on('TokenMinted', (to, tokenId, cid) => {
         const qrData = {
@@ -86,63 +149,86 @@ const CreateNewToken = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.sectionTitle}>Mine a Token</Text>
-        <View style={styles.inputContainer}>
-          <Text>Product Name:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Product Name"
-            value={productName}
-            onChangeText={setProductName}
-          />
-          <Text>Product ID:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Product ID"
-            value={productId}
-            onChangeText={setProductId}
-          />
-          <Text>Manufacture Date</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Manufacture Date"
-            value={manufactureDate}
-            onChangeText={setManufactureDate}
-          />
-          <Text>Secret Key</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Product Name"
-            value={secretKey}
-            onChangeText={setSecretKey}
-          />
-        </View>
-        {/* <WalletConnectModal /> */}
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.container}>
+          <Text style={styles.sectionTitle}>Mine a Token</Text>
+          <View style={styles.inputContainer}>
+            <Text>Upload Product Image</Text>
 
-        <TouchableOpacity style={styles.button} onPress={handleGenerateQR}>
-          <Text style={styles.buttonText}>Generate QR Code</Text>
-        </TouchableOpacity>
-        {cid && <Text>Uploaded CID: {cid}</Text>}
-        {productInfo && (
-          <View>
-            <Text>Product Name: {productInfo.productName}</Text>
-            <Text>Product ID: {productInfo.productId}</Text>
-            <Text>Manufacture Date: {productInfo.manufactureDate}</Text>
-          </View>
-        )}
+            {selectedImage && (
+              <Image
+                source={{uri: selectedImage}}
+                style={{width: 200, height: 200}} // Fixed size of 200px by 200px
+                resizeMode="contain"
+              />
+            )}
+            <View style={{marginTop: 20}}>
+              <Button title="Choose from Device" onPress={openImagePicker} />
+            </View>
+            <View style={{marginTop: 20, marginBottom: 50}}>
+              <Button title="Open Camera" onPress={handleCameraLaunch} />
+            </View>
 
-        {showQR && (
-          <View style={styles.qrContainer} ref={qrRef}>
-            <QRCode
-              value={qrValue}
-              size={200}
-              color="black"
-              backgroundColor="white"
+            <Text>Product Name:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Product Name"
+              value={productName}
+              onChangeText={setProductName}
+            />
+            <Text>Product ID:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Product ID"
+              value={productId}
+              onChangeText={setProductId}
+            />
+            <Text>Manufacture Date</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Manufacture Date"
+              value={manufactureDate}
+              onChangeText={setManufactureDate}
+            />
+
+            <Text>Secret Key</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Product Name"
+              value={secretKey}
+              onChangeText={setSecretKey}
             />
           </View>
-        )}
-      </View>
+
+          <TouchableOpacity style={styles.button} onPress={handleGenerateQR}>
+            <Text style={styles.buttonText}>Generate QR Code</Text>
+          </TouchableOpacity>
+          {cid && <Text>Uploaded CID: {cid}</Text>}
+          {productInfo && (
+            <View>
+              <Text>Product Name: {productInfo.productName}</Text>
+              <Text>Product ID: {productInfo.productId}</Text>
+              <Text>Manufacture Date: {productInfo.manufactureDate}</Text>
+              <Image
+                source={{uri: productInfo.selectedImage}}
+                style={{width: 200, height: 200}} // Fixed size of 200px by 200px
+                resizeMode="contain"
+              />
+            </View>
+          )}
+
+          {showQR && (
+            <View style={styles.qrContainer} ref={qrRef}>
+              <QRCode
+                value={qrValue}
+                size={200}
+                color="black"
+                backgroundColor="white"
+              />
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -154,6 +240,9 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
   sectionTitle: {
     fontSize: 24,

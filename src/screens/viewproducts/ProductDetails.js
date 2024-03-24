@@ -9,18 +9,13 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import {useRoute} from '@react-navigation/native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // Ensure this is correctly installed
-import ProductListScreen from './AllProducts';
-// import TransferOwnership from './transferownership';
-// import PastTransaction from './pasttransaction';
-import contract from '../../components/contractSetup';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useWallet} from '../wallet_connection/walletContext';
 
-const ProductDetailsScreen = ({route, navigation, item}) => {
+const ProductDetailsScreen = ({route, navigation}) => {
   const {product} = route.params;
   const {address} = useWallet();
-  console.log(product.tokenId);
+  console.log('Product detail for Id: ', product.tokenId.toString());
 
   return (
     <SafeAreaView style={styles.safeArea}>
