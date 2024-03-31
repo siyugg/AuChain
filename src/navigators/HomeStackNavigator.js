@@ -14,7 +14,9 @@ function HomeStackNavigate({navigation}) {
       <HomeStack.Screen
         name="Home"
         component={Home}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+        }}
       />
       <HomeStack.Screen
         name="ViewProduct"

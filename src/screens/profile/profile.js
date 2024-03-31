@@ -1,14 +1,15 @@
-import React, {useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
-  Button,
+  // Button,
   Pressable,
 } from 'react-native';
 import {ethers} from 'ethers';
+import ButtonBig from '../../../assets/common/buttonBig';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Make sure to install react-native-vector-icons
 import WalletConnectionManager from '../wallet_connection/WalletConnectionManager';
@@ -18,6 +19,12 @@ import useContract from '../../components/contractSetup';
 
 const ProfilePage = () => {
   const navigation = useNavigation();
+  const [showFullText, setShowFullText] = useState(false);
+
+  const toggleTextVisibility = () => {
+    setShowFullText(!showFullText);
+  };
+
   const {address, isConnected, connectWallet, disconnectWallet, provider} =
     useWallet();
   const handleButtonPress = () => {
@@ -33,57 +40,51 @@ const ProfilePage = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity>
-            <Icon name="arrow-back" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Settings</Text>
-          <Image
-            source={require('../../../assets/image/logo.png')}
-            style={styles.profileImage}
-          />
+          <Text style={styles.headerTitle}>Profile</Text>
         </View>
-        <View>
+        <View style={styles.account}>
           {isConnected ? (
             <>
-              <Text>Your Address:</Text>
-              <Text>{address}</Text>
-              <Button title="Disconnect" onPress={handleButtonPress}></Button>
+              <Text style={styles.accountHeader}>Your Address:</Text>
+              {/* <Text>{address}</Text> */}
+              <TouchableOpacity
+                onPress={toggleTextVisibility}
+                style={styles.addressField}>
+                <Text
+                  style={showFullText ? styles.fullText : styles.revealText}>
+                  {showFullText ? address : 'Tap to Reveal'}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleButtonPress}
+                style={styles.smallButton}>
+                <Text style={styles.smallButtonText}>Disconnect</Text>
+              </TouchableOpacity>
+              {/* <Button
+                title="Disconnect"
+                onPress={handleButtonPress}
+                style={styles.button2}></Button> */}
             </>
           ) : (
             <>
-              <Button title="Connect" onPress={handleButtonPress}></Button>
+              <TouchableOpacity
+                onPress={handleButtonPress}
+                style={styles.smallButton}>
+                <Text style={styles.smallButtonText}>Connect</Text>
+              </TouchableOpacity>
             </>
           )}
         </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Mine a Token</Text>
           <Text style={styles.sectionDescription}></Text>
-          <TouchableOpacity style={styles.button}>
-            <Text
-              onPress={() => {
-                navigation.navigate('CreateNewToken');
-              }}
-              style={styles.buttonText}>
-              Create New Token
-            </Text>
-          </TouchableOpacity>
+          <ButtonBig
+            title={'Create New Token'}
+            onPress={() => {
+              navigation.navigate('CreateNewToken');
+            }}
+          />
         </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Account</Text>
-          <Text style={styles.sectionDescription}></Text>
-          <SettingItem title="Account information" iconName="person-outline" />
-          <SettingItem title="Friends" iconName="people-outline" />
-          <SettingItem title="Notifications" iconName="notifications-none" />
-        </View>
-        <View style={styles.section}>
-          {/* <Text style={styles.sectionTitle}>Privacy</Text> */}
-          <Text style={styles.sectionDescription}></Text>
-          <SettingItem title="Security" iconName="security" />
-          <SettingItem title="Login details" iconName="input" />
-          <SettingItem title="Payment" iconName="payment" />
-          <SettingItem title="Privacy" iconName="privacy-tip" />
-        </View>
-        <Button title="Lock Wallet" onPress={{}} />
       </View>
     </SafeAreaView>
   );
@@ -108,8 +109,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
+    justifyContent: 'center',
+    borderBottomWidth: 1,
+    padding: 15,
+    borderBottomColor: '#ddd',
   },
   headerTitle: {
     fontSize: 20,
@@ -120,18 +123,75 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     fontWeight: 'bold',
   },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+
+  addressField: {
+    marginTop: 20,
+    height: '20%',
+    justifyContent: 'center',
+    width: '90%',
+    borderRadius: 10,
+    borderColor: '#ddd',
+    borderWidth: 1,
+  },
+  revealText: {
+    fontStyle: 'italic',
+    color: '#aaa',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  fullText: {
+    color: 'black',
+    fontSize: 14,
+    fontWeight: 400,
+    textAlign: 'center',
+  },
+
+  smallButton: {
+    backgroundColor: '#0ac2ff',
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
+    elevation: 3, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    marginBottom: 10,
+    height: 50,
+    width: '30%',
+  },
+  smallButtonText: {
+    fontSize: 16,
+    fontWeight: '500',
+    width: '90%',
+    height: 'fit',
+    textAlign: 'center',
+    color: 'white',
+  },
+
+  account: {
+    marginVertical: 30,
+    alignItems: 'center',
+    // backgroundColor: '#0a74ff',
+    paddingTop: 20,
+    justifyContent: 'center',
+  },
+
+  accountHeader: {
+    fontSize: 20,
   },
   section: {
-    marginTop: 32,
+    marginTop: 6,
     paddingHorizontal: 16,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'left',
+    paddingLeft: 10,
   },
   sectionDescription: {
     color: 'gray',
@@ -147,24 +207,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 16,
     fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    marginBottom: 30,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '500',
   },
 });
 

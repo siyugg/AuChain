@@ -7,25 +7,22 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Button,
+  // Button,
   Image,
 } from 'react-native';
+import ButtonBig from '../../assets/common/buttonBig';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {Ionicons} from '@expo/vector-icons'; // Make sure to install @expo/vector-icons
 import {CurrentRenderContext} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native'; // or your navigation library
 import 'react-native-gesture-handler';
 
-// import AllProducts from './AllProducts';
-// import ViewProduct from '../navigators/ViewProductNavigator';
-
 const {width} = Dimensions.get('screen');
 
 const Home = () => {
-  const navigation = useNavigation(); // hook to get the navigation object
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -36,20 +33,14 @@ const Home = () => {
         </View>
         {/* Body */}
         <View style={styles.body}>
-          <TouchableOpacity style={styles.button}>
-            <Text
-              onPress={() => navigation.navigate('ViewProduct')}
-              style={styles.buttonText}>
-              View My Products
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text
-              onPress={() => navigation.navigate('ViewPending')}
-              style={styles.buttonText}>
-              View Pending
-            </Text>
-          </TouchableOpacity>
+          <ButtonBig
+            title={'View My Products'}
+            onPress={() => navigation.navigate('ViewProduct')}
+          />
+          <ButtonBig
+            title={'View Pending'}
+            onPress={() => navigation.navigate('ViewPending')}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -59,7 +50,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff', // Change the color to match your theme
+    backgroundColor: '#fff',
   },
   container: {
     flex: 1,
@@ -68,9 +59,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd', // Light gray border color
+    borderBottomColor: '#ddd',
   },
   headerText: {
     fontSize: 20,
@@ -80,30 +72,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 230,
   },
-  button: {
-    backgroundColor: '#f0f0f0', // Light gray background for the button
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    marginBottom: 30,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
   tabBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: 10,
     borderTopWidth: 1,
-    borderTopColor: '#ddd', // Light gray border color
+    borderTopColor: '#ddd',
   },
 });
 export default Home;

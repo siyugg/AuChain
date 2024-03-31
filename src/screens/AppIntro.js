@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Text, Button, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, Button, StyleSheet, Dimensions, Image} from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {useNavigation} from '@react-navigation/native';
 import WalletConnectionManager from './wallet_connection/WalletConnectionManager';
 import {useWallet} from './wallet_connection/walletContext';
+import ButtonBig from '../../assets/common/buttonBig';
 const {width: screenWidth} = Dimensions.get('window');
 
 const IntroScreen = ({item}) => {
@@ -18,10 +19,14 @@ const IntroScreen = ({item}) => {
 
   return (
     <View style={styles.slide}>
+      <Image
+        source={require('../../assets/image/logo.png')}
+        style={{width: 100, height: 100, marginBottom: 20}}
+      />
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.text}>{item.text}</Text>
       {item.showButton && (
-        <Button
+        <ButtonBig
           title="Get Started"
           onPress={() => navigation.navigate('ConnectWallet')}
           // onPress={() => {
@@ -34,19 +39,19 @@ const IntroScreen = ({item}) => {
 };
 
 const introData = [
+  // {
+  //   title: 'Welcome to AuChain',
+  //   text: '',
+  //   showButton: false,
+  // },
+  // {
+  //   title: 'Explore Features',
+  //   text: '',
+  //   showButton: false,
+  // },
   {
-    title: 'Welcome to the App',
-    text: '',
-    showButton: false,
-  },
-  {
-    title: 'Explore Features',
-    text: '',
-    showButton: false,
-  },
-  {
-    title: 'Get Started with Authentic8!',
-    text: 'Last intro screen before you start',
+    title: 'Welcome to AuChain!',
+    text: 'Lets get started',
     showButton: true,
   },
 ];
@@ -96,6 +101,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     textAlign: 'center',
+    marginVertical: 20,
   },
   paginationDot: {
     width: 10,

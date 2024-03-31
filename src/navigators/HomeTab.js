@@ -13,15 +13,23 @@ const HomeTab = ({navigation}) => {
   return (
     <Tab.Navigator
       initialRouteName="HomeStackNavigate"
-      activeColor="#e1bf92"
-      barStyle={{backgroundColor: '#fff'}}>
+      activeColor="#0a74ff"
+      theme={{colors: {secondaryContainer: 'transparent'}}}
+      screenOptions={{
+        tabBarStyle: {position: 'absolute'},
+        barStyle: {backgroundColor: '#eee'},
+      }}>
       <Tab.Screen
         name="ScanPageStackNavigate"
         component={ScanPageStackNavigate}
         options={{
           tabBarLabel: 'Scan',
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="Scan" color={color} size={26} />
+            <MaterialCommunityIcons
+              name="qrcode-scan"
+              color={color}
+              size={26}
+            />
           ),
         }}
       />
