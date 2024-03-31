@@ -8,7 +8,15 @@ import {
   Button,
   Image,
   ScrollView,
+  Modal,
 } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import ButtonBig from '../../../assets/common/buttonBig';
+import ButtonSmall from '../../../assets/common/buttonSmall';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CryptoJS from 'crypto-js';
 import QRCode from 'react-native-qrcode-svg';
@@ -20,6 +28,8 @@ import {contractAddress} from '../../data/contractInfo';
 import useContract from '../../components/contractSetup';
 // import ImagePicker from 'react-native-image-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {abort} from 'process';
+import ViewShot from 'react-native-view-shot';
 
 const CreateNewToken = () => {
   const {address, isConnected} = useWallet();
@@ -35,6 +45,27 @@ const CreateNewToken = () => {
   const {contract} = useContract;
   const [productImage, setProductImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const viewShotRef = useRef();
+  const [saveImageSuccess, setSaveImageSuccess] = useState(false);
+
+  // useEffect(() => {
+  //   const date = new Date();
+  //   setManufactureDate(date);
+  //   console.log(manufactureDate);
+  // });
+
+  //uncomment this
+  useEffect(() => {
+    // Get today's date
+    const today = new Date();
+
+    // Format the date as YYYY-MM-DD
+    const formattedDate = today.toISOString().split('T')[0];
+
+    // Set the formatted date as the manufacture date
+    setManufactureDate(formattedDate);
+  }, []);
 
   if (!isConnected) {
     console.log('your app is not connected');
@@ -86,8 +117,7 @@ const CreateNewToken = () => {
   };
 
   const activateContract = async ({cid}) => {
-    // 2.Connect to Metamask
-    console.log('Initiating transaction');
+    // Connect to contract
     try {
       const transaction = await contract.safeMint(address, cid, {
         gasLimit: 6721975,
@@ -96,6 +126,7 @@ const CreateNewToken = () => {
       console.log('Transaction initiated: ', transaction);
       const receipt = await transaction.wait();
       console.log('receipt: ', receipt);
+
       balance = await contract.balanceOf(address);
       console.log('assets balance: ', balance.toString());
       // contract.on('TokenMinted', (to, tokenId, cid) => {
@@ -106,28 +137,38 @@ const CreateNewToken = () => {
     }
   };
 
+  const handleSaveImage = async () => {
+    try {
+      const uri = await viewShotRef.current.capture();
+      const saveResult = await CameraRoll.saveAsset(uri);
+      setSaveImageSuccess(true);
+      console.log('image saved', saveResult);
+    } catch (error) {
+      console.error('faield to save image: ', error);
+    }
+  };
+
   const handleGenerateQR = async () => {
     try {
-      // 1. Upload product information to IPFS
+      // Upload product information to IPFS
       const blob = await fetch(selectedImage).then(response => response.blob());
-
       const uploadedProductInfo = {
         productName,
         productId,
         manufactureDate,
         blob,
       };
-      console.log(uploadedProductInfo);
-      setProductInfo(uploadedProductInfo); // Update productInfo state
+      setProductInfo(uploadedProductInfo);
       const uploadedCid = await pinataFileUploader(uploadedProductInfo);
-      setCid(uploadedCid); // Update CID state
+      setCid(uploadedCid);
       console.log(`Upload success! IPFS hash: ${uploadedCid}`);
 
-      // fetchIPFSData(uploadedCid);
       const fetchedData = fetchIPFSData(uploadedCid);
+
       console.log(fetchedData);
 
-      await activateContract({cid: uploadedCid}); // Pass the uploaded CID to activateContract
+      await activateContract({cid: uploadedCid});
+
       const tokenId = contract.on('TokenMinted', (to, tokenId, cid) => {
         const qrData = {
           tokenId: tokenId.toString(),
@@ -140,93 +181,155 @@ const CreateNewToken = () => {
           secretKey,
         ).toString();
         setQrValue(encryptedData);
+
         setShowQR(true);
+        setShowQRModal(true);
       });
     } catch (error) {
       console.error('Failed to generate QR code:', error);
     }
+  };
+  const removeSelectedImage = () => {
+    setSelectedImage(null);
+  };
+
+  const toggleQRModal = () => {
+    setShowQRModal(!showQRModal);
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.container}>
-          <Text style={styles.sectionTitle}>Mine a Token</Text>
-          <View style={styles.inputContainer}>
-            <Text>Upload Product Image</Text>
-
-            {selectedImage && (
-              <Image
-                source={{uri: selectedImage}}
-                style={{width: 200, height: 200}} // Fixed size of 200px by 200px
-                resizeMode="contain"
-              />
-            )}
-            <View style={{marginTop: 20}}>
-              <Button title="Choose from Device" onPress={openImagePicker} />
-            </View>
-            <View style={{marginTop: 20, marginBottom: 50}}>
-              <Button title="Open Camera" onPress={handleCameraLaunch} />
-            </View>
-
-            <Text>Product Name:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Product Name"
-              value={productName}
-              onChangeText={setProductName}
-            />
-            <Text>Product ID:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Product ID"
-              value={productId}
-              onChangeText={setProductId}
-            />
-            <Text>Manufacture Date</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Manufacture Date"
-              value={manufactureDate}
-              onChangeText={setManufactureDate}
-            />
-
-            <Text>Secret Key</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Product Name"
-              value={secretKey}
-              onChangeText={setSecretKey}
-            />
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              <MaterialIcons name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Mint a Token</Text>
           </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.detailsImage}>Upload Product Image</Text>
 
-          <TouchableOpacity style={styles.button} onPress={handleGenerateQR}>
-            <Text style={styles.buttonText}>Generate QR Code</Text>
-          </TouchableOpacity>
-          {cid && <Text>Uploaded CID: {cid}</Text>}
-          {productInfo && (
-            <View>
-              <Text>Product Name: {productInfo.productName}</Text>
-              <Text>Product ID: {productInfo.productId}</Text>
-              <Text>Manufacture Date: {productInfo.manufactureDate}</Text>
-              <Image
-                source={{uri: productInfo.selectedImage}}
-                style={{width: 200, height: 200}} // Fixed size of 200px by 200px
-                resizeMode="contain"
+            {selectedImage ? (
+              <>
+                <View style={styles.selectedImageT}>
+                  {selectedImage && (
+                    <Image
+                      source={{uri: selectedImage}}
+                      style={{width: 200, height: 200}} // Fixed size of 200px by 200px
+                      resizeMode="contain"
+                    />
+                  )}
+
+                  <MaterialCommunityIcons
+                    onPress={removeSelectedImage}
+                    name="close-circle"
+                    size={42}
+                    color="#0ac2ff"
+                  />
+                </View>
+              </>
+            ) : (
+              <>
+                <View style={styles.selectedImageF}>
+                  <ButtonSmall
+                    title="Choose from Device"
+                    onPress={openImagePicker}
+                    color="#fff"
+                    fontSize="1px"
+                  />
+                  <ButtonSmall
+                    title="Open Camera"
+                    onPress={handleCameraLaunch}
+                    color="#fff"
+                  />
+                </View>
+              </>
+            )}
+            <View style={styles.inputDetails}>
+              <Text style={styles.details}>Product Name:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Product Name"
+                value={productName}
+                onChangeText={setProductName}
+              />
+              <Text style={styles.details}>Product ID:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Product ID"
+                value={productId}
+                onChangeText={setProductId}
+              />
+              <Text style={styles.details}>Manufacture Date:</Text>
+
+              <TextInput
+                style={styles.input}
+                placeholder="Manufacture Date"
+                value={manufactureDate}
+                onChangeText={setManufactureDate}
+                // editable={false}
+              />
+
+              <Text style={styles.details}>Secret Key:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Product Name"
+                value={secretKey}
+                onChangeText={setSecretKey}
               />
             </View>
-          )}
+          </View>
+          <ButtonBig title={'Generate QR Code'} onPress={handleGenerateQR} />
 
-          {showQR && (
-            <View style={styles.qrContainer} ref={qrRef}>
-              <QRCode
-                value={qrValue}
-                size={200}
-                color="black"
-                backgroundColor="white"
-              />
+          <Modal
+            visible={showQRModal}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={toggleQRModal}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.qrtext}>Generated QR Code</Text>
+                <TouchableOpacity
+                  onPress={toggleQRModal}
+                  style={styles.closeButton}>
+                  <MaterialCommunityIcons
+                    name="close-circle"
+                    size={24}
+                    color="black"
+                  />
+                </TouchableOpacity>
+                <ViewShot
+                  ref={viewShotRef}
+                  options={{format: 'png', quality: 0.9}}>
+                  <View style={styles.qrContainer} ref={qrRef}>
+                    <QRCode
+                      value={qrValue}
+                      size={200}
+                      color="black"
+                      backgroundColor="white"
+                    />
+                  </View>
+                </ViewShot>
+
+                <ButtonSmall
+                  title={'Save QR Code'}
+                  onPress={handleSaveImage}></ButtonSmall>
+
+                {/* <TouchableOpacity onPress={handleSaveImage}>
+                  <Text>Save QR Code to Camera Roll</Text>
+                  <MaterialIcons name="save" size={30} color="blue" />
+                </TouchableOpacity> */}
+                {saveImageSuccess && (
+                  <Text style={styles.successMessage}>
+                    QR Code save to camera roll
+                  </Text>
+                )}
+              </View>
             </View>
-          )}
+          </Modal>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -239,18 +342,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   container: {
-    padding: 16,
+    flex: 1,
   },
   scrollViewContent: {
     flexGrow: 1,
   },
-  sectionTitle: {
-    fontSize: 24,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    padding: 15,
+    borderBottomColor: '#ddd',
+  },
+  headerTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginLeft: 110,
+  },
+  detailsImage: {
+    paddingHorizontal: 22,
+    paddingVertical: 10,
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   inputContainer: {
     marginBottom: 16,
+    paddingTop: 10,
+  },
+  details: {
+    paddingHorizontal: 22,
+    paddingVertical: 10,
+  },
+  backButton: {
+    marginLeft: 10,
+    justifyContent: 'space-between',
   },
   input: {
     height: 40,
@@ -259,21 +385,51 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 8,
     paddingHorizontal: 10,
+    width: '90%',
+    alignContent: 'space-between',
+    alignSelf: 'center',
   },
-  button: {
-    backgroundColor: 'blue',
-    padding: 12,
-    borderRadius: 5,
+  selectedImageT: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    marginVertical: 30,
   },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 16,
+  selectedImageF: {
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  qrtext: {
+    alignSelf: 'center',
     fontWeight: 'bold',
+    fontSize: 16,
+    top: 20,
+    position: 'absolute',
   },
   qrContainer: {
-    marginTop: 30,
-    marginLeft: 50,
+    marginVertical: 20,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 60,
+    alignItems: 'center',
+  },
+  successMessage: {
+    marginTop: 10,
+    color: 'green',
+    fontWeight: 'bold',
   },
 });
 
