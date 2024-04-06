@@ -13,22 +13,25 @@ import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
 import useContract from '../../components/contractSetup';
-import Button from '../../../assets/common/button';
+import Button from '../../../assets/common/buttonBig';
 import {useWallet} from '../wallet_connection/walletContext';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
 
 const Item = ({name, id, manuDate, image, onPress}) => (
   <TouchableOpacity style={styles.item} onPress={onPress}>
     <View style={styles.item}>
-      <Image source={{uri: image}} style={{width: 50, height: 50}} />
+      {/* <Image source={{uri: image}} style={{width: 50, height: 50}} /> */}
+      <Image
+        source={require('../../../assets/image/miffy.jpg')}
+        style={styles.productImage}
+      />
       <View style={styles.productDetails}>
-        <Text style={styles.productName}>{name}</Text>
-
         <Text style={styles.id}>{id}</Text>
+        <Text style={styles.productName}>{name}</Text>
       </View>
-      <View style={styles.priceContainer}>
+      {/* <View style={styles.priceContainer}>
         <Text style={styles.price}>{manuDate}</Text>
-      </View>
+      </View> */}
     </View>
   </TouchableOpacity>
 );
@@ -49,6 +52,8 @@ const ProductListScreen = () => {
     console.log('your app is not connected');
     return null;
   }
+  // const image = '../../../assets/image/miffy.jpg';
+  // setProductImage(image)
 
   const renderEachItem = ({item}) => (
     <Item
@@ -120,9 +125,9 @@ const ProductListScreen = () => {
           renderItem={renderEachItem}
           keyExtractor={(item, index) => index.toString()}
         />
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Button onPress={listTokens} title="List Tokens"></Button>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );
@@ -135,25 +140,23 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'space-between',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
     borderBottomWidth: 1,
+    padding: 15,
     borderBottomColor: '#ddd',
   },
-
   backButton: {
     marginLeft: 10,
+    justifyContent: 'space-between',
   },
   headerText: {
-    alignItems: 'center',
     fontSize: 20,
     fontWeight: 'bold',
+    marginLeft: 110,
   },
-
   item: {
     flexDirection: 'row',
     padding: 16,
@@ -165,12 +168,19 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 16,
+    borderRadius: 5,
   },
   productDetails: {
     flex: 1,
+    marginBottom: 5,
+  },
+  id: {
+    marginBottom: 5,
   },
   productName: {
     fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 10,
   },
   username: {
     color: 'gray',

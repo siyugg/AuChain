@@ -26,14 +26,15 @@ const PastTransaction = ({route, navigation}) => {
     listHistory();
   }, []);
 
-  listHistory = async () => {
+  const listHistory = async () => {
     console.log('Product detail for Id: ', product.tokenId.toString());
     const tokenId = product.tokenId.toString();
     const ownersOfToken = await contract.viewOwners(tokenId);
     console.log(ownersOfToken);
 
-    setOwnersList(ownersOfToken);
+    setOwnersList(ownersOfToken.slice(1)); // Ignore the first owner
   };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -44,18 +45,21 @@ const PastTransaction = ({route, navigation}) => {
             style={styles.backButton}>
             <MaterialIcons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Past Transaction</Text>
-          <View style={styles.body}>
-            <Text style={styles.bodyHeader}>Transaction History</Text>
-            <View style={styles.ownersList}>
-              {ownersList.map((owner, index) => (
-                <Text key={index} style={styles.owner}>
-                  {owner}
-                </Text>
-              ))}
-            </View>
-          </View>
+          <Text style={styles.headerText}>Transaction History</Text>
         </View>
+        {/* Body */}
+        <ScrollView contentContainerStyle={styles.body}>
+          <View style={styles.ownersContainer}>
+            <MaterialIcons name="lens" size={20} />
+            {ownersList.map((owner, index) => (
+              <View key={index} style={styles.ownerBox}>
+                <Text style={styles.ownerText}>
+                  Owner {index + 1}: {owner}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -68,63 +72,42 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'space-between',
   },
   header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
     borderBottomWidth: 1,
+    padding: 15,
     borderBottomColor: '#ddd',
   },
-  detailsContainer: {
-    padding: 20,
+  backButton: {
+    marginLeft: 10,
+    justifyContent: 'space-between',
   },
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginLeft: 80,
   },
   body: {
-    paddingHorizontal: 20,
-    paddingBottom: 230,
-    marginTop: 20,
+    flex: 1,
+    padding: 10,
+  },
+  ownersContainer: {
     alignItems: 'center',
   },
-  bodyHeader: {
-    fontsize: 20,
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    marginBottom: 30,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
-  },
-  ownerList: {
-    marginTop: 30,
-    alignItems: 'center',
-  },
-  owner: {
-    fontSize: 14,
+  ownerBox: {
+    width: '90%',
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 5,
+    padding: 10,
     marginVertical: 5,
   },
+  ownerText: {
+    fontSize: 14,
+    paddingVertical: 2,
+  },
 });
+
 export default PastTransaction;

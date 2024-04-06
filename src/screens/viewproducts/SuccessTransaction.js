@@ -11,15 +11,17 @@ import {
   TextInput,
   Image,
 } from 'react-native';
+import ButtonBig from '../../../assets/common/buttonBig';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width} = Dimensions.get('screen');
 
 const SuccessTransaction = ({route, navigation}) => {
-  const [recipientAddress, setRecipientAddress] = useState('');
-  const [recipientName, setRecipientName] = useState('');
-  const {product} = route.params;
+  // const [recipientAddress, setRecipientAddress] = useState('');
+  // const [recipientName, setRecipientName] = useState('');
+  const {product, recipientAddress} = route.params;
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -30,36 +32,23 @@ const SuccessTransaction = ({route, navigation}) => {
             style={styles.backButton}>
             <MaterialIcons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Transaction Successful</Text>
+          {/* <Text style={styles.headerText}>Transaction Successful</Text> */}
         </View>
         <View style={styles.detailsContainer}>
-          {/* <Image
-            source={require('../images/c-bag.png')}
-            style={styles.productImage}
-          /> */}
-          <Text style={styles.productTitle}>{product.productName}</Text>
-          <Text style={styles.productId}>{product.productId}</Text>
-          <Text style={styles.productPrice}>{product.productId}</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Recipient Address"
-            value={recipientAddress}
-            onChangeText={setRecipientAddress}
-            style={styles.input}
+          <MaterialCommunityIcons
+            name="check-circle-outline"
+            size={72}
+            color="green"
+            style={styles.tickIcon}
           />
-          <TextInput
-            placeholder="Recipient Name"
-            value={recipientName}
-            onChangeText={setRecipientName}
-            style={styles.input}
-          />
+          <Text style={styles.text1}>Transaction Successful</Text>
+          <Text style={styles.text2}>Pending Approval from recipient:</Text>
+          <Text style={styles.recipientAddress}>{recipientAddress}</Text>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}>Back to Home</Text>
-        </TouchableOpacity>
+
+        <ButtonBig
+          title={'Back to Home'}
+          onPress={() => navigation.navigate('Home')}></ButtonBig>
       </View>
     </SafeAreaView>
   );
@@ -75,6 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   header: {
+    flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
     borderBottomWidth: 1,
@@ -86,28 +76,31 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginLeft: 83,
   },
   body: {
     paddingHorizontal: 20,
     paddingBottom: 230,
   },
-  button: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    marginBottom: 30,
+  tickIcon: {alignSelf: 'center', marginTop: 100},
+  text1: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginVertical: 15,
   },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '500',
+  text2: {
+    fontSize: 18,
+    alignSelf: 'center',
+    marginTop: 100,
+  },
+  recipientAddress: {
+    alignSelf: 'center',
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: 'grey',
+    borderRadius: 10,
+    padding: 15,
   },
   tabBar: {
     flexDirection: 'row',

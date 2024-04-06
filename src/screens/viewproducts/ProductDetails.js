@@ -26,17 +26,23 @@ const ProductDetailsScreen = ({route, navigation}) => {
             onPress={() => navigation.goBack()}>
             <MaterialIcons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
+          <Text style={styles.headerText}>Product Details</Text>
         </View>
-        <Image source={product.image} style={styles.productImage} />
+        <Image
+          source={require('../../../assets/image/miffy.jpg')}
+          style={styles.productImage}
+        />
+
+        {/* <Image source={product.image} style={styles.productImage} /> */}
         <View style={styles.detailsContainer}>
           <Text style={styles.productTitle}>{product.productName}</Text>
-          <Text style={styles.productId}>Product ID: {product.productId}</Text>
-          <Text style={styles.productPrice}>
+          <Text style={styles.productId}>Product Id: {product.productId}</Text>
+          {/* <Text style={styles.productPrice}>
             {product.price} ETH ({product.usdPrice})
-          </Text>
-          <Text style={styles.purchaseDate}>
+          </Text> */}
+          {/* <Text style={styles.purchaseDate}>
             Purchased on: {product.manufactureDate}
-          </Text>
+          </Text> */}
           <Text style={styles.creatorInfo}>Creator: {address}</Text>
           <Text style={styles.creationDate}>
             Created on: {product.manufactureDate}
@@ -74,9 +80,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  backButton: {
-    margin: 10,
-  },
+  // backButton: {
+  //   margin: 10,
+  // },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -86,7 +92,12 @@ const styles = StyleSheet.create({
   },
   productImage: {
     width: '100%',
-    height: 300,
+    height: 400,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 110,
   },
   detailsContainer: {
     padding: 20,
@@ -106,7 +117,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   productTitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 10,
   },

@@ -17,6 +17,7 @@ import 'react-native-gesture-handler';
 import useContract from '../../components/contractSetup';
 import {useWallet} from '../wallet_connection/walletContext';
 import {Web3Provider} from '@ethersproject/providers';
+import ButtonBig from '../../../assets/common/buttonBig';
 
 const {width} = Dimensions.get('screen');
 
@@ -66,8 +67,6 @@ const ConfirmTransaction = ({route, navigation, item}) => {
   };
 
   const handleTransfer = async () => {
-    console.log('attempting to initiate transaction');
-
     let owner = await contract.ownerOf(product.tokenId);
     if (owner !== address) {
       const isApproved = await contract.getApproved(product.tokenId);
@@ -83,22 +82,22 @@ const ConfirmTransaction = ({route, navigation, item}) => {
       }
     }
 
-    try {
-      console.log(
-        `from ${address}, to: ${recipientAddress}, id:${product.tokenId}`,
-      );
-      owner = await contract.ownerOf(product.tokenId);
-      console.log(`owner of ${product.tokenId} is ${owner}`);
+    // console.log(
+    //   `from ${address}, to: ${recipientAddress}, id:${product.tokenId}`,
+    // );
+    // owner = await contract.ownerOf(product.tokenId);
+    // console.log(`owner of ${product.tokenId} is ${owner}`);
 
+    try {
       const tx = await contract
         .connect(signer)
         .initiateTransfer(recipientAddress, product.tokenId, {
           gasLimit: gasLimit,
         });
-      // const txResponse = await signer.sendTransaction(tx);
-
       const transactionHash = tx.hash;
-      console.log('transactionHash is ' + transactionHash);
+      refreshProductList();
+
+      // console.log('transactionHash is ' + transactionHash);
 
       // Wait for the transaction to be mined (optional)
       const receipt = await tx.wait();
@@ -107,9 +106,11 @@ const ConfirmTransaction = ({route, navigation, item}) => {
       // await tx.wait();
       console.log(tx);
       console.log('success');
-      refreshProductList();
 
-      navigation.navigate('SuccessTransaction', {product: product});
+      navigation.navigate('SuccessTransaction', {
+        product: product,
+        recipientAddress: recipientAddress,
+      });
     } catch (error) {
       console.log('Failed to transferownership', error);
     }
@@ -127,19 +128,29 @@ const ConfirmTransaction = ({route, navigation, item}) => {
           <Text style={styles.headerText}>Confirm Transaction</Text>
         </View>
         <View style={styles.detailsContainer}>
-          {/* <Image
-            source={require('../images/c-bag.png')}
+          <Image
+            source={require('../../../assets/image/miffy.jpg')}
             style={styles.productImage}
-          /> */}
-          <Text style={styles.productTitle}>{product.productName}</Text>
-          <Text style={styles.productId}>{product.productId}</Text>
-          <Text style={styles.productPrice}>{product.productId}</Text>
-          <Text>Transfer to: {recipientAddress}</Text>
+          />
+          <Text style={styles.productTitle}>
+            <Text style={styles.nameText}>Product Name: </Text>
+            <Text>{product.productName} </Text>
+          </Text>
+          <Text style={styles.productId}>
+            <Text style={styles.idText}>Product Id: </Text>
+            {product.productId}
+          </Text>
+          {/* <Text style={styles.productPrice}>{product.productId}</Text> */}
+          {/* <View style={styles.toWrapper}> */}
+          <Text style={styles.transferTo}>Transfer to:</Text>
+          <Text style={styles.recipientAddress}>{recipientAddress}</Text>
+          {/* </View> */}
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleTransfer}>
+        {/* <TouchableOpacity style={styles.button} onPress={handleTransfer}>
           <Text style={styles.buttonText}>Transfer my Ownership</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <ButtonBig title={'Transfer My Ownership'} onPress={handleTransfer} />
       </View>
     </SafeAreaView>
   );
@@ -155,9 +166,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
     borderBottomWidth: 1,
+    padding: 15,
     borderBottomColor: '#ddd',
   },
   detailsContainer: {
@@ -166,10 +178,46 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginLeft: 83,
   },
   body: {
     paddingHorizontal: 20,
     paddingBottom: 230,
+  },
+
+  productTitle: {
+    fontSize: 20,
+    alignSelf: 'flex-start',
+    marginLeft: 100,
+    marginTop: 30,
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  nameText: {
+    margin: 100,
+  },
+  productId: {
+    fontSize: 20,
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+
+  transferTo: {
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: 40,
+    marginBottom: '10',
+  },
+  recipientAddress: {
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    borderColor: 'grey',
+    borderWidth: 1,
+    padding: 15,
+    borderRadius: 10,
+    margin: 5,
+    // marginTop: 30,
   },
   button: {
     backgroundColor: '#f0f0f0',
@@ -184,6 +232,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     marginBottom: 30,
+  },
+  productImage: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    borderRadius: 10,
   },
   buttonText: {
     fontSize: 16,

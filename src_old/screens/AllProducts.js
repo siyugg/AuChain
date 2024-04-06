@@ -17,7 +17,7 @@ import ProductDetails from './ProductDetails';
 import 'react-native-gesture-handler';
 import ProductData from '../data/data';
 import contract from '../components/contractSetup';
-import Button from '../../assets/common/button';
+import Button from '../../assets/common/buttonBig';
 import {useWallet} from './wallet_connection/walletContext';
 import fetchIPFSData from '../components/retrieve-ipfs-data';
 

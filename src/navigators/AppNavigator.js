@@ -1,12 +1,8 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import IntroScreen from '../screens/AppIntro';
-import ConnectWallet from '../screens/wallet_connection/connectwallet';
 import Home from './HomeTab';
 import HomeTab from './HomeTab';
-// import ViewProduct from './ViewProductNavigator'; // Import the ViewProduct stack
-// import HomePageNavigate from './HomeStackNavigator';
-// import WalletConnectionManager from '../screens/connectwallet';
 import WalletConnectionManager from '../screens/wallet_connection/WalletConnectionManager';
 
 const Stack = createNativeStackNavigator();
@@ -34,12 +30,6 @@ function AppNavigator(initialRouteName) {
         component={Home}
         options={{headerShown: false}}
       />
-      {/*
-      <Stack.Screen
-        name="ViewProduct"
-        component={ViewProduct}
-        options={{headerShown: false}} // Adjust options as needed
-      /> */}
     </Stack.Navigator>
   );
 }

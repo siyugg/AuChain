@@ -24,7 +24,7 @@ const AllPending = () => {
 
   if (provider && provider.getSigner) {
     // Check if provider and getSigner method exist
-    signer = provider.getSigner(); // Obtain signer from provider
+    signer = provider.getSigner();
     signer.getAddress().then(address => {
       signerAddress = ethers.utils.getAddress(address);
       console.log('signer address: ', signerAddress);
@@ -61,7 +61,7 @@ const AllPending = () => {
 
   const renderInTabContent = () => (
     <View style={styles.tabContent}>
-      <Text style={styles.tabContentText}>Pending transfers In</Text>
+      <Text style={styles.tabContentText}>No Incoming Pending Transfers</Text>
       {pendingIn.map((transfer, index) => (
         <View key={index} style={styles.transferContainer}>
           <Text
@@ -74,7 +74,7 @@ const AllPending = () => {
 
   const renderOutTabContent = () => (
     <View style={styles.tabContent}>
-      <Text style={styles.tabContentText}>Pending transfers Out</Text>
+      <Text style={styles.tabContentText}>No Outgoing Pending Transfers</Text>
       {pendingOut.map((transfer, index) => (
         <View key={index} style={styles.transferContainer}>
           <Text

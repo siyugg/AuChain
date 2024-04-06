@@ -4,7 +4,7 @@ import {
   useWalletConnectModal,
   WalletConnectModal,
 } from '@walletconnect/modal-react-native';
-const projectId = '91068e323d87f3f46c7c134efcf234f6';
+const projectId = process.env.WALLETCONNECT_PROJECT_ID;
 
 const providerMetadata = {
   name: 'AuChain',
@@ -18,19 +18,14 @@ const providerMetadata = {
 };
 
 const WalletContext = createContext();
-
 export const WalletProvider = ({children}) => {
   const {isConnected, address, open, close, provider} = useWalletConnectModal();
-
-  // Provide an interface to control the modal outside the hook
   const connectWallet = () => open();
   const disconnectWallet = () => {
     if (provider) {
       provider.disconnect();
     }
   };
-
-  // Expose the wallet connection state and methods
   return (
     <WalletContext.Provider
       value={{isConnected, address, provider, connectWallet, disconnectWallet}}>
@@ -46,5 +41,4 @@ export const WalletProvider = ({children}) => {
     </WalletContext.Provider>
   );
 };
-
 export const useWallet = () => useContext(WalletContext);

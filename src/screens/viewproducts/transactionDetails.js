@@ -11,6 +11,7 @@ import {
   TextInput,
   Image,
 } from 'react-native';
+import ButtonBig from '../../../assets/common/buttonBig';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -38,7 +39,7 @@ const TransactionDetails = ({route, navigation, item}) => {
 
         {/* Recipient Address Input */}
         <View style={styles.inputBox}>
-          <Text style={styles.inputLabel}>Recipient Address</Text>
+          <Text style={styles.inputLabel}>Enter Recipient Address</Text>
           <TextInput
             placeholder="Enter recipient's address"
             value={recipientAddress}
@@ -58,16 +59,25 @@ const TransactionDetails = ({route, navigation, item}) => {
           /> */}
         {/* </View> */}
 
-        <TouchableOpacity
-          style={styles.button}
+        <ButtonBig
+          title={'Next'}
           onPress={() =>
             navigation.navigate('ConfirmTransaction', {
               product: product,
               recipientAddress: recipientAddress,
             })
-          }>
-          <Text style={styles.buttonText}>Next</Text>
-        </TouchableOpacity>
+          }
+        />
+        {/* // <TouchableOpacity */}
+        {/* //   style={styles.button}
+        //   onPress={() => */}
+        {/* //     navigation.navigate('ConfirmTransaction', { */}
+        {/* //       product: product,
+        //       recipientAddress: recipientAddress,
+        //     })
+        //   }>
+        //   <Text style={styles.buttonText}>Next</Text>
+        // </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );
@@ -80,25 +90,34 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
+    // padding: 20,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    borderBottomWidth: 1,
+    padding: 15,
+    borderBottomColor: '#ddd',
   },
   backButton: {
     marginRight: 10,
+    justifyContent: 'space-between',
   },
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginLeft: 83,
   },
   inputBox: {
-    marginBottom: 20,
+    width: 400,
+    marginBottom: 15,
+    padding: 5,
+    alignSelf: 'center',
   },
   inputLabel: {
-    marginBottom: 5,
+    paddingTop: 10,
+    marginLeft: 10,
+    marginVertical: 10,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -108,20 +127,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     fontSize: 16,
+    width: '100%',
+    // width: '95%',
+    alignSelf: 'center',
   },
-  button: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    marginTop: 10,
-  },
+  // button: {
+  //   backgroundColor: '#f0f0f0',
+  //   borderRadius: 10,
+  //   padding: 20,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   elevation: 3,
+  //   shadowColor: '#000',
+  //   shadowOffset: {width: 0, height: 2},
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 2,
+  //   marginTop: 10,
+  // },
   buttonText: {
     fontSize: 16,
     fontWeight: '500',

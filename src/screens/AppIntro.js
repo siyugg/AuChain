@@ -15,7 +15,6 @@ const IntroScreen = ({item}) => {
       navigation.navigate('Home');
     }
   }, [isConnected, navigation]);
-  const handleButtonPress = () => {};
 
   return (
     <View style={styles.slide}>
@@ -29,9 +28,6 @@ const IntroScreen = ({item}) => {
         <ButtonBig
           title="Get Started"
           onPress={() => navigation.navigate('ConnectWallet')}
-          // onPress={() => {
-          //   handleButtonPress;
-          // }}
         />
       )}
     </View>
@@ -39,16 +35,6 @@ const IntroScreen = ({item}) => {
 };
 
 const introData = [
-  // {
-  //   title: 'Welcome to AuChain',
-  //   text: '',
-  //   showButton: false,
-  // },
-  // {
-  //   title: 'Explore Features',
-  //   text: '',
-  //   showButton: false,
-  // },
   {
     title: 'Welcome to AuChain!',
     text: 'Lets get started',
@@ -90,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff', // White background for each slide
+    backgroundColor: '#fff',
     padding: 15,
   },
   title: {
