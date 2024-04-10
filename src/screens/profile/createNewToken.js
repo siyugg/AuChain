@@ -30,6 +30,10 @@ import useContract from '../../components/contractSetup';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {abort} from 'process';
 import ViewShot from 'react-native-view-shot';
+import RNFS from 'react-native-fs';
+import Jimp from 'jimp';
+import {fs} from 'fs';
+import base64 from 'react-native-base64';
 
 const CreateNewToken = () => {
   const {address, isConnected} = useWallet();
@@ -48,22 +52,13 @@ const CreateNewToken = () => {
   const [showQRModal, setShowQRModal] = useState(false);
   const viewShotRef = useRef();
   const [saveImageSuccess, setSaveImageSuccess] = useState(false);
-
-  // useEffect(() => {
-  //   const date = new Date();
-  //   setManufactureDate(date);
-  //   console.log(manufactureDate);
-  // });
+  const [base64Data, setBase64Data] = useState(null);
 
   //uncomment this
   useEffect(() => {
-    // Get today's date
     const today = new Date();
-
     // Format the date as YYYY-MM-DD
     const formattedDate = today.toISOString().split('T')[0];
-
-    // Set the formatted date as the manufacture date
     setManufactureDate(formattedDate);
   }, []);
 
@@ -150,22 +145,29 @@ const CreateNewToken = () => {
 
   const handleGenerateQR = async () => {
     try {
-      // Upload product information to IPFS
-      const blob = await fetch(selectedImage).then(response => response.blob());
+      const base64String = await RNFS.readFile(selectedImage, 'base64');
+      setBase64Data(base64String);
+      // const blob = await fetch(selectedImage).then(response => response.blob());
       const uploadedProductInfo = {
         productName,
         productId,
         manufactureDate,
-        blob,
+        base64String,
       };
       setProductInfo(uploadedProductInfo);
       const uploadedCid = await pinataFileUploader(uploadedProductInfo);
       setCid(uploadedCid);
       console.log(`Upload success! IPFS hash: ${uploadedCid}`);
 
-      const fetchedData = fetchIPFSData(uploadedCid);
-
-      console.log(fetchedData);
+      fetchIPFSData(uploadedCid)
+        .then(fetchedData => {
+          const {base64, textData} = fetchedData;
+          // console.log('Base64:', base64);
+          // console.log('Text data:', textData);
+        })
+        .catch(error => {
+          console.error('Error fetching IPFS data:', error);
+        });
 
       await activateContract({cid: uploadedCid});
 
@@ -283,6 +285,12 @@ const CreateNewToken = () => {
             </View>
           </View>
           <ButtonBig title={'Generate QR Code'} onPress={handleGenerateQR} />
+          {base64Data && (
+            <Image
+              source={{uri: `data:image/jpeg;base64,${base64Data}`}}
+              style={{width: 200, height: 200}}
+            />
+          )}
 
           <Modal
             visible={showQRModal}

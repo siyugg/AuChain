@@ -13,25 +13,20 @@ import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
 import useContract from '../../components/contractSetup';
-import Button from '../../../assets/common/buttonBig';
 import {useWallet} from '../wallet_connection/walletContext';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
 
-const Item = ({name, id, manuDate, image, onPress}) => (
+const Item = ({name, id, base64, onPress}) => (
   <TouchableOpacity style={styles.item} onPress={onPress}>
     <View style={styles.item}>
-      {/* <Image source={{uri: image}} style={{width: 50, height: 50}} /> */}
       <Image
-        source={require('../../../assets/image/miffy.jpg')}
+        source={{uri: `data:image/jpeg;base64,${base64}`}}
         style={styles.productImage}
       />
       <View style={styles.productDetails}>
         <Text style={styles.id}>{id}</Text>
         <Text style={styles.productName}>{name}</Text>
       </View>
-      {/* <View style={styles.priceContainer}>
-        <Text style={styles.price}>{manuDate}</Text>
-      </View> */}
     </View>
   </TouchableOpacity>
 );
@@ -41,8 +36,8 @@ const ProductListScreen = () => {
   const [productInfo, setProductInfo] = useState(null);
   const [products, setProducts] = useState([]);
   const {contract} = useContract;
-  const [productImage, setProductImage] = useState(null);
   const navigation = useNavigation();
+  const [base64Data, setBase64Data] = useState(null);
 
   useEffect(() => {
     loadProducts();
@@ -52,33 +47,16 @@ const ProductListScreen = () => {
     console.log('your app is not connected');
     return null;
   }
-  // const image = '../../../assets/image/miffy.jpg';
-  // setProductImage(image)
 
   const renderEachItem = ({item}) => (
     <Item
       name={item.productName}
       id={item.productId}
       manuDate={item.manufactureDate}
-      image={item.imageSource}
+      base64={item.base64String}
       onPress={() => navigation.navigate('ProductDetails', {product: item})}
     />
   );
-
-  const listTokens = async () => {
-    console.log('getting balance');
-    balance = await contract.balanceOf(address);
-    console.log('balance:', balance.toString());
-
-    for (let i = 1; i <= balance; i++) {
-      currToken = await contract.tokenInfo(i);
-      console.log(
-        `TokenID: ${currToken.id.toString()}, Owner Address: ${
-          currToken.ownerAddress
-        }, CID: ${currToken.cid}`,
-      );
-    }
-  };
 
   const loadProducts = async () => {
     try {
@@ -89,13 +67,11 @@ const ProductListScreen = () => {
       for (let i = 0; i < balance.toNumber(); i++) {
         const tokenId = await contract.tokenOfOwnerByIndex(address, i);
         const cid = await contract.getCID(tokenId);
-        // console.log('currtoken, id: ', cid, tokenId.toString());
 
         const productPromise = fetchIPFSData(cid).then(data => ({
           ...data,
           tokenId: tokenId,
         }));
-
         productPromises.push(productPromise);
       }
 
@@ -103,7 +79,7 @@ const ProductListScreen = () => {
       const validProducts = productsData.filter(product => product !== null);
       setProducts(validProducts);
 
-      console.log('products data: ', productsData);
+      // console.log('products data: ', productsData);
     } catch (error) {
       console.error('Failed to load products:', error);
     }
@@ -125,9 +101,12 @@ const ProductListScreen = () => {
           renderItem={renderEachItem}
           keyExtractor={(item, index) => index.toString()}
         />
-        {/* <TouchableOpacity>
-          <Button onPress={listTokens} title="List Tokens"></Button>
-        </TouchableOpacity> */}
+        {base64Data && (
+          <Image
+            source={{uri: `data:image/jpeg;base64,${base64Data}`}}
+            style={{width: 200, height: 200}}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
