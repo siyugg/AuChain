@@ -1,7 +1,6 @@
-// // WalletConnectionManager.js
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Pressable, Text} from 'react-native';
-import {useWallet} from './walletContext'; // Adjust the import path to where you saved WalletContext.js
+import {useWallet} from './walletContext';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -76,10 +75,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-  // pressableMargin: {
-  //   marginTop: 16,
-  // },
-  // connectionText: {},
 });
 
 export default WalletConnectionManager;

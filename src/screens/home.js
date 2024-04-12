@@ -16,7 +16,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {CurrentRenderContext} from '@react-navigation/native';
-import {useNavigation} from '@react-navigation/native'; // or your navigation library
+import {useNavigation} from '@react-navigation/native';
 import 'react-native-gesture-handler';
 
 const {width} = Dimensions.get('screen');

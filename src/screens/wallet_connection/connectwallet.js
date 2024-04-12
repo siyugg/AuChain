@@ -1,15 +1,13 @@
-// App.js or the entry point of your React Native app
 import React, {useContext, useEf} from 'react';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
 
-import {WalletProvider, useWallet} from './walletContext'; // Adjust the import path according to your file structure
+import {WalletProvider, useWallet} from './walletContext';
 import WalletConnectionManager from './WalletConnectionManager';
-import {useNavigation} from '@react-navigation/native'; // or your navigation library
+import {useNavigation} from '@react-navigation/native';
 import {
   WalletConnectModal,
   useWalletConnectModal,
 } from '@walletconnect/modal-react-native';
-// import {useWallet} from './walletContext'; // Adjust the import path to where you saved WalletContext.js
 
 const projectId = process.env.REACT_APP_WALLETCONNECT_PROJECT_ID;
 const providerMetadata = {

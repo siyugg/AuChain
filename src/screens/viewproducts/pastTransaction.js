@@ -32,7 +32,7 @@ const PastTransaction = ({route, navigation}) => {
     const ownersOfToken = await contract.viewOwners(tokenId);
     console.log(ownersOfToken);
 
-    setOwnersList(ownersOfToken.slice(1)); // Ignore the first owner
+    setOwnersList(ownersOfToken.slice(1));
   };
 
   return (

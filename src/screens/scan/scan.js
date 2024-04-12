@@ -47,7 +47,7 @@ const ScanPage = () => {
       setScannedData(data);
 
       // Decrypt the scanned data
-      const secretKey = 'miffyi'; // Add your secret key here
+      const secretKey = 'miffyi';
       const bytes = CryptoJS.AES.decrypt(data, secretKey);
       try {
         const decryptedData = bytes.toString(CryptoJS.enc.Utf8);

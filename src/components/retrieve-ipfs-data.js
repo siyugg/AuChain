@@ -12,7 +12,6 @@ const fetchIPFSData = async cid => {
     const data = await response.json();
 
     const {base64, ...textData} = data;
-    console.log('Text data:', textData);
 
     // console.log(`Fetched IPFS data for CID ${cid}:`, base64, textData);
     return data;

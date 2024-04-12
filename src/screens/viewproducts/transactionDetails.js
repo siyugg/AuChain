@@ -18,7 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import 'react-native-gesture-handler';
 
-const {width} = Dimensions.get('screen');
+// const {width} = Dimensions.get('screen');
 
 const TransactionDetails = ({route, navigation, item}) => {
   const [recipientAddress, setRecipientAddress] = useState('');
@@ -68,16 +68,6 @@ const TransactionDetails = ({route, navigation, item}) => {
             })
           }
         />
-        {/* // <TouchableOpacity */}
-        {/* //   style={styles.button}
-        //   onPress={() => */}
-        {/* //     navigation.navigate('ConfirmTransaction', { */}
-        {/* //       product: product,
-        //       recipientAddress: recipientAddress,
-        //     })
-        //   }>
-        //   <Text style={styles.buttonText}>Next</Text>
-        // </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

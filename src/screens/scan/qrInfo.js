@@ -57,7 +57,9 @@ const QrInfo = ({route, navigation}) => {
         ) : productData ? (
           <View style={styles.info}>
             <Image
-              source={require('../../../assets/image/miffy.jpg')}
+              source={{
+                uri: `data:image/jpeg;base64,${productData.base64String}`,
+              }}
               style={styles.productImage}
             />
             <Text style={styles.name}>

@@ -24,31 +24,11 @@ const {width} = Dimensions.get('screen');
 const ConfirmTransaction = ({route, navigation, item}) => {
   const [recipientName, setRecipientName] = useState('');
   const {product, recipientAddress} = route.params;
-  const {address, provider: web3Provider} = useWallet();
+  const {address} = useWallet();
   const gasLimit = ethers.utils.hexlify(6721975);
-  const {contract} = useContract;
-  // const [signer, setSigner] = useState('');
+  const {contract, provider, signer} = useContract;
+  const base64 = product.base64String;
 
-  //refer to contractSetup for getting signer through private key
-  // useEffect(() => {
-  //   const connectSigner = () => {
-  //     const provider = new ethers.providers.Web3Provider(web3Provider);
-  //     let signer;
-  //     let signerAddress;
-
-  //     if (provider && provider.getSigner) {
-  //       // Check if provider and getSigner method exist
-  //       signer = provider.getSigner(); // Obtain signer from provider
-  //       setSigner(signer);
-  //       signer.getAddress().then(address => {
-  //         signerAddress = ethers.utils.getAddress(address);
-  //         console.log('signer address: ', signerAddress);
-  //       });
-  //     }
-  //   };
-  // });
-
-  console.log('signer: ', signer);
   // After successful transaction
   const refreshProductList = async () => {
     const updatedProducts = [];
@@ -67,54 +47,79 @@ const ConfirmTransaction = ({route, navigation, item}) => {
   };
 
   const handleTransfer = async () => {
-    let owner = await contract.ownerOf(product.tokenId);
-    if (owner !== address) {
-      const isApproved = await contract.getApproved(product.tokenId);
-      const isOperatorApproved = await contract.isApprovedForAll(
-        owner,
-        address,
-      );
-      if (address !== isApproved && !isOperatorApproved) {
-        console.log(
-          'The caller is neither the owner nor approved to transfer this token.',
-        );
-        return;
-      }
-    }
-
-    // console.log(
-    //   `from ${address}, to: ${recipientAddress}, id:${product.tokenId}`,
-    // );
-    // owner = await contract.ownerOf(product.tokenId);
-    // console.log(`owner of ${product.tokenId} is ${owner}`);
-
     try {
+      const resultTokenId = product.tokenId.toNumber();
+      console.log(resultTokenId);
+
+      // Initiating the transfer directly
       const tx = await contract
         .connect(signer)
         .initiateTransfer(recipientAddress, product.tokenId, {
           gasLimit: gasLimit,
         });
+
       const transactionHash = tx.hash;
       refreshProductList();
 
-      // console.log('transactionHash is ' + transactionHash);
-
-      // Wait for the transaction to be mined (optional)
+      // Wait for the transaction to be mined
       const receipt = await tx.wait();
       console.log('Transaction was mined in block:', receipt.blockNumber);
 
-      // await tx.wait();
-      console.log(tx);
-      console.log('success');
-
+      console.log('Transaction success');
       navigation.navigate('SuccessTransaction', {
         product: product,
         recipientAddress: recipientAddress,
       });
     } catch (error) {
-      console.log('Failed to transferownership', error);
+      console.log('Failed to transfer ownership:', error);
     }
   };
+
+  // const handleTransfer = async () => {
+  //   const resultTokenId = product.tokenId.toNumber();
+  //   console.log(resultTokenId);
+  //   let owner = await contract.ownerOf(resultTokenId);
+  //   console.log('owner:', owner.toLowerCase());
+  //   console.log('address:', address);
+  //   if (owner !== address) {
+  //     const isApproved = await contract.getApproved(product.tokenId);
+  //     const isOperatorApproved = await contract.isApprovedForAll(
+  //       owner,
+  //       address,
+  //     );
+  //     if (address !== isApproved && !isOperatorApproved) {
+  //       console.log(
+  //         'The caller is neither the owner nor approved to transfer this token.',
+  //       );
+  //       return;
+  //     }
+  //   }
+
+  //   try {
+  //     const tx = await contract
+  //       .connect(signer)
+  //       .initiateTransfer(recipientAddress, product.tokenId, {
+  //         gasLimit: gasLimit,
+  //       });
+  //     const transactionHash = tx.hash;
+  //     refreshProductList();
+
+  //     // Wait for the transaction to be mined
+  //     const receipt = await tx.wait();
+  //     console.log('Transaction was mined in block:', receipt.blockNumber);
+
+  //     // await tx.wait();
+  //     console.log(tx);
+  //     console.log('success');
+
+  //     navigation.navigate('SuccessTransaction', {
+  //       product: product,
+  //       recipientAddress: recipientAddress,
+  //     });
+  //   } catch (error) {
+  //     console.log('Failed to transfer ownership', error);
+  //   }
+  // };
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -128,8 +133,12 @@ const ConfirmTransaction = ({route, navigation, item}) => {
           <Text style={styles.headerText}>Confirm Transaction</Text>
         </View>
         <View style={styles.detailsContainer}>
-          <Image
+          {/* <Image
             source={require('../../../assets/image/miffy.jpg')}
+            style={styles.productImage}
+          /> */}
+          <Image
+            source={{uri: `data:image/jpeg;base64,${base64}`}}
             style={styles.productImage}
           />
           <Text style={styles.productTitle}>

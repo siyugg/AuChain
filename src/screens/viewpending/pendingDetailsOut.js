@@ -11,12 +11,23 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useWallet} from '../wallet_connection/walletContext';
+import useContract from '../../components/contractSetup';
 
-const ProductDetailsScreen = ({route, navigation}) => {
+const PendingDetailsOut = ({route, navigation}) => {
   const {product} = route.params;
   const {address} = useWallet();
+  const {contract, provider, signer} = useContract;
   console.log('Product detail for Id: ', product.tokenId.toString());
   const base64 = product.base64String;
+
+  const rejectTransfer = async tokenId => {
+    try {
+      await contract.rejectTransfer(tokenId);
+      console.log('Transfer Rejected');
+    } catch (error) {
+      console.error('Error in rejecting transaction: ', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -27,45 +38,36 @@ const ProductDetailsScreen = ({route, navigation}) => {
             onPress={() => navigation.goBack()}>
             <MaterialIcons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Product Details</Text>
+          <Text style={styles.headerText}>Pending Details</Text>
         </View>
         <Image
-          source={{uri: `data:image/jpeg;base64,${base64}`}}
+          source={{
+            uri: `data:image/jpeg;base64,${product.ipfsData.base64String}`,
+          }}
           style={styles.productImage}
         />
 
-        {/* <Image source={product.image} style={styles.productImage} /> */}
         <View style={styles.detailsContainer}>
           <Text style={styles.productTitle}>{product.productName}</Text>
-          <Text style={styles.productId}>Product Id: {product.productId}</Text>
-          {/* <Text style={styles.productPrice}>
-            {product.price} ETH ({product.usdPrice})
-          </Text> */}
-          {/* <Text style={styles.purchaseDate}>
-            Purchased on: {product.manufactureDate}
-          </Text> */}
-          <Text style={styles.creatorInfo}>Creator: {address}</Text>
-          <Text style={styles.creationDate}>
-            Created on: {product.manufactureDate}
+          <Text style={styles.productId}>
+            Product Id: {product.ipfsData.productId}
           </Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
-              <Text
-                onPress={() =>
-                  navigation.navigate('TransactionDetails', {product: product})
-                }>
-                Transfer Ownership
+          <Text style={styles.productName}>
+            Product Name: {product.ipfsData.productName}
+          </Text>
+          <Text style={styles.creationDate}>
+            Created on: {product.ipfsData.manufactureDate}
+          </Text>
+          <Text style={styles.creatorInfo}>
+            Pending transfer to: {product.toAddress}
+          </Text>
+          {/* <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.buttonReject}>
+              <Text onPress={rejectTransfer} style={styles.buttonText}>
+                Withdraw
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text
-                onPress={() =>
-                  navigation.navigate('PastTransaction', {product: product})
-                }>
-                View Past Transactions
-              </Text>
-            </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -89,8 +91,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
   productImage: {
-    width: '100%',
-    height: 400,
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    alignSelf: 'center',
+    marginTop: 100,
   },
   headerText: {
     fontSize: 20,
@@ -99,8 +104,9 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     padding: 20,
+    alignItems: 'center',
   },
-  button: {
+  buttonReject: {
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     padding: 20,
@@ -113,6 +119,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     marginBottom: 25,
+    backgroundColor: 'red',
+    marginHorizontal: 10,
+    width: '45%',
   },
   productTitle: {
     fontSize: 28,
@@ -120,7 +129,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   productId: {
-    fontSize: 16,
+    fontSize: 15,
+    marginBottom: 5,
+  },
+  productName: {
+    fontSize: 15,
     marginBottom: 5,
   },
   productPrice: {
@@ -129,21 +142,31 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   purchaseDate: {
-    fontSize: 16,
+    fontSize: 15,
     marginBottom: 20,
   },
   creatorInfo: {
-    fontSize: 16,
+    fontSize: 15,
     marginBottom: 5,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   creationDate: {
-    fontSize: 16,
+    fontSize: 15,
     marginBottom: 20,
   },
   buttonContainer: {
     width: '100%',
-    marginTop: 16,
+    marginTop: 14,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
-export default ProductDetailsScreen;
+export default PendingDetailsOut;

@@ -147,7 +147,7 @@ const CreateNewToken = () => {
     try {
       const base64String = await RNFS.readFile(selectedImage, 'base64');
       setBase64Data(base64String);
-      // const blob = await fetch(selectedImage).then(response => response.blob());
+
       const uploadedProductInfo = {
         productName,
         productId,
@@ -162,8 +162,6 @@ const CreateNewToken = () => {
       fetchIPFSData(uploadedCid)
         .then(fetchedData => {
           const {base64, textData} = fetchedData;
-          // console.log('Base64:', base64);
-          // console.log('Text data:', textData);
         })
         .catch(error => {
           console.error('Error fetching IPFS data:', error);

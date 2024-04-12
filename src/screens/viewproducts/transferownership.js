@@ -13,11 +13,10 @@ import {
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // Ensure this is correctly installed
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import {Ionicons} from '@expo/vector-icons'; // Make sure to install @expo/vector-icons
 import {CurrentRenderContext} from '@react-navigation/native';
-import {useNavigation} from '@react-navigation/native'; // or your navigation library
+import {useNavigation} from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import TransactionDetails from './transactionDetails';
 

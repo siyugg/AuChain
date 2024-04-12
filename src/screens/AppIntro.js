@@ -2,7 +2,6 @@ import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, Button, StyleSheet, Dimensions, Image} from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {useNavigation} from '@react-navigation/native';
-import WalletConnectionManager from './wallet_connection/WalletConnectionManager';
 import {useWallet} from './wallet_connection/walletContext';
 import ButtonBig from '../../assets/common/buttonBig';
 const {width: screenWidth} = Dimensions.get('window');
