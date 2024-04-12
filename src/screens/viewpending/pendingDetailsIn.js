@@ -10,15 +10,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useWallet} from '../wallet_connection/walletContext';
 import useContract from '../../components/contractSetup';
 
 const PendingDetailsIn = ({route, navigation}) => {
   const {product} = route.params;
-  const {address} = useWallet();
-  const {contract, provider, signer} = useContract;
+  const {contract, signer} = useContract;
   console.log('Product detail for Id: ', product.tokenId.toString());
-  const base64 = product.base64String;
 
   const acceptTransfer = async tokenId => {
     try {

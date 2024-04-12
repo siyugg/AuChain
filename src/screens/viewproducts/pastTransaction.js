@@ -13,9 +13,8 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
-import useContract from '../../components/contractSetup';
 
-const {width} = Dimensions.get('screen');
+import useContract from '../../components/contractSetup';
 
 const PastTransaction = ({route, navigation}) => {
   const {product} = route.params;
@@ -38,7 +37,6 @@ const PastTransaction = ({route, navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -47,7 +45,6 @@ const PastTransaction = ({route, navigation}) => {
           </TouchableOpacity>
           <Text style={styles.headerText}>Transaction History</Text>
         </View>
-        {/* Body */}
         <ScrollView contentContainerStyle={styles.body}>
           <View style={styles.ownersContainer}>
             <MaterialIcons name="lens" size={20} />

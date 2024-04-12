@@ -9,10 +9,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native';
-
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
-import {toFormData} from 'axios';
 
 const QrInfo = ({route, navigation}) => {
   const {decryptedData} = route.params;

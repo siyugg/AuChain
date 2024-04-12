@@ -2,10 +2,10 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
 
-import Home from '../screens/home';
 import AllPending from '../screens/viewpending/allPending';
 import PendingDetailsOut from '../screens/viewpending/pendingDetailsOut';
 import PendingDetailsIn from '../screens/viewpending/pendingDetailsIn';
+
 const PendingStack = createNativeStackNavigator();
 
 function ViewPending(initialRouteName) {

@@ -4,7 +4,6 @@ import 'react-native-gesture-handler';
 
 import ProfilePage from '../screens/profile/profile';
 import CreateNewToken from '../screens/profile/createNewToken';
-// import CreateNewToken from '../screens/createNewToken';
 
 const ProfileStack = createNativeStackNavigator();
 

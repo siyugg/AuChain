@@ -1,38 +1,28 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  ScrollView,
   SafeAreaView,
   View,
   Text,
   StyleSheet,
-  Dimensions,
   TouchableOpacity,
-  Button,
-  TextInput,
-  Image,
 } from 'react-native';
-import ButtonBig from '../../../assets/common/buttonBig';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const {width} = Dimensions.get('screen');
+import ButtonBig from '../../../assets/common/buttonBig';
 
 const SuccessTransaction = ({route, navigation}) => {
-  // const [recipientAddress, setRecipientAddress] = useState('');
-  // const [recipientName, setRecipientName] = useState('');
   const {product, recipientAddress} = route.params;
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backButton}>
             <MaterialIcons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          {/* <Text style={styles.headerText}>Transaction Successful</Text> */}
         </View>
         <View style={styles.detailsContainer}>
           <MaterialCommunityIcons
@@ -82,7 +72,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 230,
   },
-  tickIcon: {alignSelf: 'center', marginTop: 100},
+  tickIcon: {
+    alignSelf: 'center',
+    marginTop: 100,
+  },
   text1: {
     fontSize: 28,
     fontWeight: 'bold',

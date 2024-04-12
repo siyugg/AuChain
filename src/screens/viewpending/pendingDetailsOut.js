@@ -10,24 +10,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useWallet} from '../wallet_connection/walletContext';
 import useContract from '../../components/contractSetup';
 
 const PendingDetailsOut = ({route, navigation}) => {
   const {product} = route.params;
-  const {address} = useWallet();
-  const {contract, provider, signer} = useContract;
+  const {contract} = useContract;
   console.log('Product detail for Id: ', product.tokenId.toString());
-  const base64 = product.base64String;
-
-  const rejectTransfer = async tokenId => {
-    try {
-      await contract.rejectTransfer(tokenId);
-      console.log('Transfer Rejected');
-    } catch (error) {
-      console.error('Error in rejecting transaction: ', error);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -61,13 +49,6 @@ const PendingDetailsOut = ({route, navigation}) => {
           <Text style={styles.creatorInfo}>
             Pending transfer to: {product.toAddress}
           </Text>
-          {/* <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.buttonReject}>
-              <Text onPress={rejectTransfer} style={styles.buttonText}>
-                Withdraw
-              </Text>
-            </TouchableOpacity>
-          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>

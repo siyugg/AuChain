@@ -9,10 +9,7 @@ import {
   FlatList,
 } from 'react-native';
 import useContract from '../../components/contractSetup';
-import {useWallet} from '../wallet_connection/walletContext';
-import {ethers} from 'ethers';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
-import {toFormData} from 'axios';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -20,13 +17,8 @@ const AllPending = () => {
   const navigation = useNavigation();
   const [tab, setTab] = useState('In');
   const {contract, signer} = useContract;
-  const [pendingIn, setPendingIn] = useState([]); //tokenId In
-  const [pendingOut, setPendingOut] = useState([]); //tokenId Out
   const [productDataIn, setProductDataIn] = useState([]); //ipfsDataIn
   const [productDataOut, setProductDataOut] = useState([]); //ipfsDataOut
-  const [fromAddress, setFromAddress] = useState([]); //transferrequest.from Address
-  const [toAddress, setToAddress] = useState([]); //transferrequest.to Address
-  const [productImage, setProductImage] = useState([]);
 
   const handleTabChange = selectedTab => {
     setTab(selectedTab);
@@ -262,9 +254,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   activeTab: {
-    // backgroundColor: '#fff1cf',
     backgroundColor: 'rgba(255, 142, 43, 0.4)',
-    // borderRadius: 15,
     borderTopStartRadius: 15,
     borderTopEndRadius: 15,
     alignItems: 'center',

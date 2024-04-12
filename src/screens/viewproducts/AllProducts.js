@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
-
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import useContract from '../../components/contractSetup';
 import {useWallet} from '../wallet_connection/walletContext';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
@@ -78,8 +78,6 @@ const ProductListScreen = () => {
       const productsData = await Promise.all(productPromises);
       const validProducts = productsData.filter(product => product !== null);
       setProducts(validProducts);
-
-      // console.log('products data: ', productsData);
     } catch (error) {
       console.error('Failed to load products:', error);
     }

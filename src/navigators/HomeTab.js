@@ -1,11 +1,10 @@
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import React from 'react';
 import HomeStackNavigate from './HomeStackNavigator';
 import ProfileStackNavigate from './ProfileNavigator';
 import ScanPageStackNavigate from './ScanPageNavigator';
+
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const HomeTab = ({navigation}) => {
   const Tab = createMaterialBottomTabNavigator();

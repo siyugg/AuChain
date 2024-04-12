@@ -75,51 +75,6 @@ const ConfirmTransaction = ({route, navigation, item}) => {
     }
   };
 
-  // const handleTransfer = async () => {
-  //   const resultTokenId = product.tokenId.toNumber();
-  //   console.log(resultTokenId);
-  //   let owner = await contract.ownerOf(resultTokenId);
-  //   console.log('owner:', owner.toLowerCase());
-  //   console.log('address:', address);
-  //   if (owner !== address) {
-  //     const isApproved = await contract.getApproved(product.tokenId);
-  //     const isOperatorApproved = await contract.isApprovedForAll(
-  //       owner,
-  //       address,
-  //     );
-  //     if (address !== isApproved && !isOperatorApproved) {
-  //       console.log(
-  //         'The caller is neither the owner nor approved to transfer this token.',
-  //       );
-  //       return;
-  //     }
-  //   }
-
-  //   try {
-  //     const tx = await contract
-  //       .connect(signer)
-  //       .initiateTransfer(recipientAddress, product.tokenId, {
-  //         gasLimit: gasLimit,
-  //       });
-  //     const transactionHash = tx.hash;
-  //     refreshProductList();
-
-  //     // Wait for the transaction to be mined
-  //     const receipt = await tx.wait();
-  //     console.log('Transaction was mined in block:', receipt.blockNumber);
-
-  //     // await tx.wait();
-  //     console.log(tx);
-  //     console.log('success');
-
-  //     navigation.navigate('SuccessTransaction', {
-  //       product: product,
-  //       recipientAddress: recipientAddress,
-  //     });
-  //   } catch (error) {
-  //     console.log('Failed to transfer ownership', error);
-  //   }
-  // };
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -133,10 +88,6 @@ const ConfirmTransaction = ({route, navigation, item}) => {
           <Text style={styles.headerText}>Confirm Transaction</Text>
         </View>
         <View style={styles.detailsContainer}>
-          {/* <Image
-            source={require('../../../assets/image/miffy.jpg')}
-            style={styles.productImage}
-          /> */}
           <Image
             source={{uri: `data:image/jpeg;base64,${base64}`}}
             style={styles.productImage}
@@ -156,9 +107,6 @@ const ConfirmTransaction = ({route, navigation, item}) => {
           {/* </View> */}
         </View>
 
-        {/* <TouchableOpacity style={styles.button} onPress={handleTransfer}>
-          <Text style={styles.buttonText}>Transfer my Ownership</Text>
-        </TouchableOpacity> */}
         <ButtonBig title={'Transfer My Ownership'} onPress={handleTransfer} />
       </View>
     </SafeAreaView>

@@ -1,21 +1,9 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  // Button,
-  Pressable,
-} from 'react-native';
-import {ethers} from 'ethers';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import ButtonBig from '../../../assets/common/buttonBig';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Make sure to install react-native-vector-icons
-import WalletConnectionManager from '../wallet_connection/WalletConnectionManager';
-import {useNavigation} from '@react-navigation/native'; // or your navigation library
+import {useNavigation} from '@react-navigation/native';
 import {useWallet} from '../wallet_connection/walletContext';
-import useContract from '../../components/contractSetup';
 
 const ProfilePage = () => {
   const navigation = useNavigation();
@@ -25,8 +13,7 @@ const ProfilePage = () => {
     setShowFullText(!showFullText);
   };
 
-  const {address, isConnected, connectWallet, disconnectWallet, provider} =
-    useWallet();
+  const {address, isConnected, connectWallet, disconnectWallet} = useWallet();
   const handleButtonPress = () => {
     if (isConnected) {
       console.log('wallet is connected');
@@ -46,7 +33,6 @@ const ProfilePage = () => {
           {isConnected ? (
             <>
               <Text style={styles.accountHeader}>Your Address:</Text>
-              {/* <Text>{address}</Text> */}
               <TouchableOpacity
                 onPress={toggleTextVisibility}
                 style={styles.addressField}>
@@ -60,10 +46,6 @@ const ProfilePage = () => {
                 style={styles.smallButton}>
                 <Text style={styles.smallButtonText}>Disconnect</Text>
               </TouchableOpacity>
-              {/* <Button
-                title="Disconnect"
-                onPress={handleButtonPress}
-                style={styles.button2}></Button> */}
             </>
           ) : (
             <>
@@ -92,9 +74,7 @@ const ProfilePage = () => {
 
 const SettingItem = ({title, iconName}) => (
   <TouchableOpacity style={styles.settingItem}>
-    {/* <Icon name={iconName} size={24} color="black" /> */}
     <Text style={styles.itemTitle}>{title}</Text>
-    {/* <Icon name="chevron-right" size={24} color="black" /> */}
   </TouchableOpacity>
 );
 
@@ -175,7 +155,6 @@ const styles = StyleSheet.create({
   account: {
     marginVertical: 30,
     alignItems: 'center',
-    // backgroundColor: '#0a74ff',
     paddingTop: 20,
     justifyContent: 'center',
   },

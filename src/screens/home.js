@@ -7,19 +7,12 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  // Button,
   Image,
 } from 'react-native';
-import ButtonBig from '../../assets/common/buttonBig';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import {CurrentRenderContext} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import 'react-native-gesture-handler';
 
-const {width} = Dimensions.get('screen');
+import ButtonBig from '../../assets/common/buttonBig';
 
 const Home = () => {
   const navigation = useNavigation();

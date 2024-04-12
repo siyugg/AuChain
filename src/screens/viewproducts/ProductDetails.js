@@ -34,16 +34,9 @@ const ProductDetailsScreen = ({route, navigation}) => {
           style={styles.productImage}
         />
 
-        {/* <Image source={product.image} style={styles.productImage} /> */}
         <View style={styles.detailsContainer}>
           <Text style={styles.productTitle}>{product.productName}</Text>
           <Text style={styles.productId}>Product Id: {product.productId}</Text>
-          {/* <Text style={styles.productPrice}>
-            {product.price} ETH ({product.usdPrice})
-          </Text> */}
-          {/* <Text style={styles.purchaseDate}>
-            Purchased on: {product.manufactureDate}
-          </Text> */}
           <Text style={styles.creatorInfo}>Creator: {address}</Text>
           <Text style={styles.creationDate}>
             Created on: {product.manufactureDate}

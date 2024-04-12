@@ -10,30 +10,26 @@ import {
   ScrollView,
   Modal,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import ButtonBig from '../../../assets/common/buttonBig';
-import ButtonSmall from '../../../assets/common/buttonSmall';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation} from '@react-navigation/native';
+
 import CryptoJS from 'crypto-js';
 import QRCode from 'react-native-qrcode-svg';
-import {useWallet} from '../wallet_connection/walletContext';
-import pinataFileUploader from '../../components/upload-file-to-pinata';
-import fetchIPFSData from '../../components/retrieve-ipfs-data';
 import {ethers} from 'ethers';
-import {contractAddress} from '../../data/contractInfo';
-import useContract from '../../components/contractSetup';
-// import ImagePicker from 'react-native-image-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {abort} from 'process';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import ViewShot from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
-import Jimp from 'jimp';
-import {fs} from 'fs';
-import base64 from 'react-native-base64';
+
+import {contractAddress} from '../../data/contractInfo';
+import ButtonBig from '../../../assets/common/buttonBig';
+import ButtonSmall from '../../../assets/common/buttonSmall';
+import {useWallet} from '../wallet_connection/walletContext';
+import useContract from '../../components/contractSetup';
+import pinataFileUploader from '../../components/upload-file-to-pinata';
+import fetchIPFSData from '../../components/retrieve-ipfs-data';
 
 const CreateNewToken = () => {
   const {address, isConnected} = useWallet();
@@ -45,14 +41,14 @@ const CreateNewToken = () => {
   const [cid, setCid] = useState('');
   const [qrValue, setQrValue] = useState(' ');
   const [showQR, setShowQR] = useState(false);
-  const qrRef = useRef();
   const {contract} = useContract;
-  const [productImage, setProductImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [showQRModal, setShowQRModal] = useState(false);
-  const viewShotRef = useRef();
   const [saveImageSuccess, setSaveImageSuccess] = useState(false);
   const [base64Data, setBase64Data] = useState(null);
+  const viewShotRef = useRef();
+  const qrRef = useRef();
+  const navigation = useNavigation();
 
   //uncomment this
   useEffect(() => {

@@ -1,5 +1,5 @@
-import React, {useContext, useEf} from 'react';
-import {StyleSheet, Text, View, Pressable} from 'react-native';
+import React, {useContext} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 
 import {WalletProvider, useWallet} from './walletContext';
 import WalletConnectionManager from './WalletConnectionManager';
@@ -18,7 +18,6 @@ const providerMetadata = {
 const ConnectWallet = () => {
   const navigation = useNavigation();
   const myWallet = useContext(WalletContext);
-  // const {isConnected} = useWallet();
 
   useEffect(() => {
     if (isConnected) {
