@@ -1,4 +1,4 @@
-## AuChain (To the chain)
+# AuChain (To the chain)
 
 To get started, install the dependencies:
 
