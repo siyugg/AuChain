@@ -8,4 +8,10 @@ const provider = new ethers.providers.JsonRpcProvider(ganacheUrl);
 const signer = new ethers.Wallet(privateKey, provider);
 const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-export default contract;
+const useContract = {
+  provider,
+  signer,
+  contract,
+};
+
+export default useContract;
