@@ -42,7 +42,8 @@ Upon successful import, you should be able to see the address, and the balance.
 
 ### **5. Compile and Deploy the smart contract on Remix IDE.**
 
-- Compile your smart contract and copy the contract ABI into the `src/data/contractInfo.js` file in this repository.
+Copy the smart contract in the `/contract/MyAssets.sol` file from this repository onto Remix IDE.
+- Compile the smart contract and copy the contract ABI into the `src/data/contractInfo.js` file from this repository.
 - Change the environment on Remix IDE to `Dev - Ganache Provider` before deploying the smart contract.
 - Obtain the contract address after deploying the contract and place it in the same file as the contract ABI.</br></br>
 
