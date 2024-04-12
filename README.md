@@ -11,7 +11,7 @@ To get started, install the dependencies:
 Ensure the following are installed and setup.
 
 ### **1. Install Ganache-CLI by following the guide [here](https://docs.nethereum.com/en/latest/ethereum-and-clients/ganache-cli/).** </br></br>
-    To run, enter this into a new terminal
+To run, enter this into a new terminal
 ```
 ganache-cli --server.host 0.0.0.0 --server.port 8545
 ```
