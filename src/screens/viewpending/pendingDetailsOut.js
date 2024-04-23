@@ -10,11 +10,11 @@ import {
   SafeAreaView,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import useContract from '../../components/contractSetup';
+import {useWallet} from '../wallet_connection/walletContext';
 
 const PendingDetailsOut = ({route, navigation}) => {
   const {product} = route.params;
-  const {contract} = useContract;
+  const {contract} = useWallet();
   console.log('Product detail for Id: ', product.tokenId.toString());
 
   return (

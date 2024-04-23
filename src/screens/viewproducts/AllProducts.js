@@ -12,7 +12,6 @@ import {useNavigation} from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import useContract from '../../components/contractSetup';
 import {useWallet} from '../wallet_connection/walletContext';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
 
@@ -32,14 +31,15 @@ const Item = ({name, id, base64, onPress}) => (
 );
 
 const ProductListScreen = () => {
-  const {address, isConnected} = useWallet();
+  const {address, isConnected, signer, contract} = useWallet();
   const [productInfo, setProductInfo] = useState(null);
   const [products, setProducts] = useState([]);
-  const {contract} = useContract;
+  // const {contract, signer} = useContract();
   const navigation = useNavigation();
   const [base64Data, setBase64Data] = useState(null);
 
   useEffect(() => {
+    console.log('all prodcuts: ', signer, contract);
     loadProducts();
   }, []);
 

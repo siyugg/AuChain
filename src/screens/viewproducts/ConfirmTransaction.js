@@ -9,12 +9,10 @@ import {
   Dimensions,
   TouchableOpacity,
   Button,
-  TextInput,
   Image,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
-import useContract from '../../components/contractSetup';
 import {useWallet} from '../wallet_connection/walletContext';
 import {Web3Provider} from '@ethersproject/providers';
 import ButtonBig from '../../../assets/common/buttonBig';
@@ -24,9 +22,8 @@ const {width} = Dimensions.get('screen');
 const ConfirmTransaction = ({route, navigation, item}) => {
   const [recipientName, setRecipientName] = useState('');
   const {product, recipientAddress} = route.params;
-  const {address} = useWallet();
+  const {address, contract, signer} = useWallet();
   const gasLimit = ethers.utils.hexlify(6721975);
-  const {contract, provider, signer} = useContract;
   const base64 = product.base64String;
 
   // After successful transaction
@@ -43,7 +40,6 @@ const ConfirmTransaction = ({route, navigation, item}) => {
         tokenId: tokenId.toString(),
       });
     }
-    // setProducts(updatedProducts);
   };
 
   const handleTransfer = async () => {

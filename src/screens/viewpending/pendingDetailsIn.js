@@ -10,11 +10,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import useContract from '../../components/contractSetup';
+import {useWallet} from '../wallet_connection/walletContext';
 
 const PendingDetailsIn = ({route, navigation}) => {
   const {product} = route.params;
-  const {contract, signer} = useContract;
+  const {contract, signer} = useWallet();
+  // const {contract, signer} = useContract;
   console.log('Product detail for Id: ', product.tokenId.toString());
 
   const acceptTransfer = async tokenId => {
@@ -31,7 +32,10 @@ const PendingDetailsIn = ({route, navigation}) => {
 
   const rejectTransfer = async tokenId => {
     try {
-      await contract.rejectTransfer(tokenId);
+      await contract
+        .connect(signer)
+        .rejectTransfer(tokenId)
+        .then(navigation.navigate('AllPending'));
       console.log('Transfer Rejected');
     } catch (error) {
       console.error('Error in rejecting transaction: ', error);

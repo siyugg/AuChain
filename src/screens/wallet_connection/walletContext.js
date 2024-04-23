@@ -4,7 +4,8 @@ import {
   useWalletConnectModal,
   WalletConnectModal,
 } from '@walletconnect/modal-react-native';
-const projectId = process.env.WALLETCONNECT_PROJECT_ID;
+import {ethers} from 'ethers';
+import {contractAddress, contractABI} from '../../data/contractInfo';
 
 const providerMetadata = {
   name: 'AuChain',
@@ -20,7 +21,51 @@ const providerMetadata = {
 const WalletContext = createContext();
 export const WalletProvider = ({children}) => {
   const {isConnected, address, open, close, provider} = useWalletConnectModal();
+  const [signer, setSigner] = useState(null);
+  const [contract, setContract] = useState(null);
   const connectWallet = () => open();
+  const ganacheUrl = process.env.REACT_APP_GANACHE_URL;
+  const projectId = process.env.WALLETCONNECT_PROJECT_ID;
+
+  useEffect(() => {
+    const initializeContractAndSigner = async () => {
+      if (isConnected && address) {
+        const ganacheProvider = new ethers.providers.JsonRpcProvider(
+          ganacheUrl,
+        );
+        // setProvider(newProvider);
+        const importedAccounts = {};
+        const mnemonic = process.env.REACT_APP_GANACHE_MNEMONIC;
+        const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic);
+
+        for (let i = 0; i < 10; i++) {
+          const account = hdNode.derivePath(`m/44'/60'/0'/0/${i}`);
+          importedAccounts[account.address] = account;
+        }
+
+        for (let account in importedAccounts) {
+          const accountLower = account.toLowerCase();
+          if (accountLower === address.toLowerCase()) {
+            const object = importedAccounts[account];
+            const privateKey = object.privateKey;
+            const newSigner = new ethers.Wallet(privateKey, ganacheProvider);
+            setSigner(newSigner);
+            console.log(newSigner);
+
+            const newContract = new ethers.Contract(
+              contractAddress,
+              contractABI,
+              newSigner,
+            );
+            setContract(newContract);
+            break;
+          }
+        }
+      }
+    };
+    initializeContractAndSigner();
+  }, [isConnected, address]);
+
   const disconnectWallet = () => {
     if (provider) {
       provider.disconnect();
@@ -28,7 +73,15 @@ export const WalletProvider = ({children}) => {
   };
   return (
     <WalletContext.Provider
-      value={{isConnected, address, provider, connectWallet, disconnectWallet}}>
+      value={{
+        isConnected,
+        address,
+        provider,
+        connectWallet,
+        disconnectWallet,
+        signer,
+        contract,
+      }}>
       {children}
       <WalletConnectModal
         explorerRecommendedWalletIds={[

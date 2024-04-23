@@ -1,19 +1,29 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import ButtonBig from '../../../assets/common/buttonBig';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {useWallet} from '../wallet_connection/walletContext';
+import {sign} from 'crypto';
 
 const ProfilePage = () => {
   const navigation = useNavigation();
   const [showFullText, setShowFullText] = useState(false);
+  const {
+    address,
+    isConnected,
+    connectWallet,
+    disconnectWallet,
+    signer,
+    contract,
+  } = useWallet();
+  // const {signer, contract} = useContract(address);
 
-  const toggleTextVisibility = () => {
+  const toggleTextVisibility = async () => {
+    console.log('signer address is: ', address);
     setShowFullText(!showFullText);
   };
 
-  const {address, isConnected, connectWallet, disconnectWallet} = useWallet();
   const handleButtonPress = () => {
     if (isConnected) {
       console.log('wallet is connected');
@@ -147,7 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     width: '90%',
-    height: 'fit',
     textAlign: 'center',
     color: 'white',
   },

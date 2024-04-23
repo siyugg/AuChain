@@ -8,17 +8,23 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import useContract from '../../components/contractSetup';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useWallet} from '../wallet_connection/walletContext';
 
 const AllPending = () => {
   const navigation = useNavigation();
   const [tab, setTab] = useState('In');
-  const {contract, signer} = useContract;
+  const {address, contract, signer} = useWallet();
+  // const {contract, signer} = useContract;
   const [productDataIn, setProductDataIn] = useState([]); //ipfsDataIn
   const [productDataOut, setProductDataOut] = useState([]); //ipfsDataOut
+  const [pendingIn, setPendingIn] = useState([]); // tokenId In
+  const [pendingOut, setPendingOut] = useState([]); // tokenId Out
+  const [fromAddress, setFromAddress] = useState([]); // transferrequest.from Address
+  const [toAddress, setToAddress] = useState([]); // transferrequest.to Address
+  const [productImage, setProductImage] = useState([]);
 
   const handleTabChange = selectedTab => {
     setTab(selectedTab);
@@ -54,7 +60,6 @@ const AllPending = () => {
     console.log('mergeDataOut');
     const ipfsData = await getProductInfo(tokenId);
     const toAddress = await getToAddress(tokenId);
-    console.log('gotten mergedata');
     return {tokenId, ipfsData, toAddress};
   };
 
@@ -62,7 +67,6 @@ const AllPending = () => {
     console.log('mergeDataIn');
     const ipfsData = await getProductInfo(tokenId);
     const fromAddress = await getFromAddress(tokenId);
-    console.log('gotten mergedata');
     return {tokenId, ipfsData, fromAddress};
   };
 
@@ -72,7 +76,7 @@ const AllPending = () => {
         .connect(signer)
         .getPendingTransfersIn({});
       const pendingInTokens = pendingInResult.toString();
-      setPendingOut(pendingInTokens);
+      setPendingIn(pendingInTokens);
       const newData = await Promise.all(
         pendingInResult.map(tokenId => mergeDataIn(tokenId)),
       );
@@ -82,6 +86,7 @@ const AllPending = () => {
       const pendingOutResult = await contract
         .connect(signer)
         .getPendingTransfersOut({});
+
       const pendingOutTokens = pendingOutResult.toString();
       setPendingOut(pendingOutTokens);
       const newData = await Promise.all(

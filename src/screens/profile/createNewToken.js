@@ -27,12 +27,11 @@ import {contractAddress} from '../../data/contractInfo';
 import ButtonBig from '../../../assets/common/buttonBig';
 import ButtonSmall from '../../../assets/common/buttonSmall';
 import {useWallet} from '../wallet_connection/walletContext';
-import useContract from '../../components/contractSetup';
 import pinataFileUploader from '../../components/upload-file-to-pinata';
 import fetchIPFSData from '../../components/retrieve-ipfs-data';
 
 const CreateNewToken = () => {
-  const {address, isConnected} = useWallet();
+  const {address, isConnected, contract} = useWallet();
   const [productName, setProductName] = useState('');
   const [productId, setProductId] = useState('');
   const [manufactureDate, setManufactureDate] = useState('');
@@ -41,7 +40,6 @@ const CreateNewToken = () => {
   const [cid, setCid] = useState('');
   const [qrValue, setQrValue] = useState(' ');
   const [showQR, setShowQR] = useState(false);
-  const {contract} = useContract;
   const [selectedImage, setSelectedImage] = useState(null);
   const [showQRModal, setShowQRModal] = useState(false);
   const [saveImageSuccess, setSaveImageSuccess] = useState(false);
@@ -214,7 +212,7 @@ const CreateNewToken = () => {
                   {selectedImage && (
                     <Image
                       source={{uri: selectedImage}}
-                      style={{width: 200, height: 200}} // Fixed size of 200px by 200px
+                      style={{width: 200, height: 200}}
                       resizeMode="contain"
                     />
                   )}
@@ -251,6 +249,7 @@ const CreateNewToken = () => {
                 placeholder="Product Name"
                 value={productName}
                 onChangeText={setProductName}
+                clearButtonMode="always"
               />
               <Text style={styles.details}>Product ID:</Text>
               <TextInput
@@ -258,6 +257,7 @@ const CreateNewToken = () => {
                 placeholder="Product ID"
                 value={productId}
                 onChangeText={setProductId}
+                clearButtonMode="always"
               />
               <Text style={styles.details}>Manufacture Date:</Text>
 
@@ -266,6 +266,7 @@ const CreateNewToken = () => {
                 placeholder="Manufacture Date"
                 value={manufactureDate}
                 onChangeText={setManufactureDate}
+                clearButtonMode="always"
                 // editable={false}
               />
 
@@ -275,6 +276,7 @@ const CreateNewToken = () => {
                 placeholder="Product Name"
                 value={secretKey}
                 onChangeText={setSecretKey}
+                clearButtonMode="always"
               />
             </View>
           </View>

@@ -5,8 +5,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import CryptoJS from 'crypto-js';
 import {useWallet} from '../wallet_connection/walletContext';
-import contract from '../../components/contractSetup';
-import useContract from '../../components/contractSetup';
 
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -16,8 +14,7 @@ const ScanPage = () => {
   const [isDecrypted, setIsDecrypted] = useState(false);
   const [viewFocused, setViewFocused] = useState(false);
   const navigation = useNavigation();
-  const {address} = useWallet();
-  const {contract} = useContract;
+  const {address, contract} = useWallet();
 
   const checkOwner0 = async () => {
     ownerAddress = await contract.ownerOf(decryptedData.tokenId);
@@ -47,7 +44,7 @@ const ScanPage = () => {
       setScannedData(data);
 
       // Decrypt the scanned data
-      const secretKey = 'miffyi';
+      const secretKey = 'miffy';
       const bytes = CryptoJS.AES.decrypt(data, secretKey);
       try {
         const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
@@ -102,8 +99,8 @@ const ScanPage = () => {
               backgroundColor: 'white',
               padding: 20,
             }}>
-            <Text>Scanned QR Code: {scannedData}</Text>
-            <Text>Decrypted Data: {decryptedData}</Text>
+            {/* <Text>Scanned QR Code: {scannedData}</Text>
+            <Text>Decrypted Data: {decryptedData}</Text> */}
           </View>
         )}
       </View>

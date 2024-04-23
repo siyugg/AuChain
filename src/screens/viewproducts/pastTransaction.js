@@ -14,11 +14,11 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import 'react-native-gesture-handler';
 
-import useContract from '../../components/contractSetup';
+import {useWallet} from '../wallet_connection/walletContext';
 
 const PastTransaction = ({route, navigation}) => {
   const {product} = route.params;
-  const {contract} = useContract;
+  const {contract} = useWallet();
   const [ownersList, setOwnersList] = useState([]);
 
   useEffect(() => {

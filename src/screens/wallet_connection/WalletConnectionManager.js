@@ -5,7 +5,8 @@ import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const WalletConnectionManager = () => {
-  const {isConnected, address, connectWallet, disconnectWallet} = useWallet();
+  const {isConnected, address, connectWallet, disconnectWallet, provider} =
+    useWallet();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -14,13 +15,15 @@ const WalletConnectionManager = () => {
     }
   }, [isConnected, navigation]);
 
-  const handleConnection = () => {
+  const handleConnection = async () => {
     if (isConnected) {
       console.log('wallet is connected');
       disconnectWallet();
     } else {
       console.log('Wallet is not connected');
-      connectWallet();
+      await connectWallet().then(res => {
+        console.log('connect wallet result: ', res);
+      });
     }
   };
 
