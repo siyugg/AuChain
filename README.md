@@ -1,7 +1,7 @@
 # AuChain (To the chain)
 
 <div align="center">
-<img src="./assets/image/logo.png" alt="logo" style="border-radius: 24px; height: 200px" />
+<img height="200px" border-radius="24px" src="./assets/image/logo.png" alt="logo" />
 </div>
 
 A proof-of-concept mobile application designed to integrate physical products with the blockchain to tackle superfakes.</br>
