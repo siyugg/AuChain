@@ -1,8 +1,8 @@
 # AuChain (To the chain)
 
-<div style="text-align: center;">
+<center>
 <img src="./assets/image/logo.png" alt="logo" style="border-radius: 24px; height: 200px" />
-</div>
+</center>
 
 A proof-of-concept mobile application designed to integrate physical products with the blockchain to tackle superfakes.</br>
 The immutable nature of blockchain allows transparent peer-to-peer ownership transfers, empowering consumers to verify the authenticity of physical assets prior to purchase.
@@ -88,8 +88,7 @@ This will start the metro server and launch the application on your device.
 
 ## Watch the video demo of the application usage here:
 
-<div style="text-align: center;">
-    <a href="https://youtu.be/n4h98Vq099M"><img src="https://img.youtube.com/vi/n4h98Vq099M/0.jpg" width="40%"></a>
-</div>
-
+<center>
+<a href="https://youtu.be/n4h98Vq099M"><img src="https://img.youtube.com/vi/n4h98Vq099M/0.jpg" width="40%"></a>
+</center>
 <!-- [![AuChain](https://img.youtube.com/vi/n4h98Vq099M/0.jpg)](https://www.youtube.com/watch?v=n4h98Vq099M) -->
