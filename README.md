@@ -1,5 +1,12 @@
 # AuChain (To the chain)
 
+<div style="text-align: center;">
+<img src="./assets/image/logo.png" alt="logo" style="border-radius: 24px; height: 200px" />
+</div>
+
+A proof-of-concept mobile application designed to integrate physical products with the blockchain to tackle superfakes.</br>
+The immutable nature of blockchain allows transparent peer-to-peer ownership transfers, empowering consumers to verify the authenticity of physical assets prior to purchase.
+
 To get started, install the dependencies:
 
 - Run `npm install` to install the packages in `package.json`.
@@ -79,6 +86,10 @@ This will start the metro server and launch the application on your device.
 
 ### **4. Connect to your MetaMask mobile account by pressing on the connect button on the app screen.**
 
-## Watch the video demo here:
+## Watch the video demo of the application usage here:
 
-> https://youtu.be/n4h98Vq099M
+<div style="text-align: center;">
+    <a href="https://youtu.be/n4h98Vq099M"><img src="https://img.youtube.com/vi/n4h98Vq099M/0.jpg" width="40%"></a>
+</div>
+
+<!-- [![AuChain](https://img.youtube.com/vi/n4h98Vq099M/0.jpg)](https://www.youtube.com/watch?v=n4h98Vq099M) -->
